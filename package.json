@@ -1,0 +1,8 @@
+{
+  "name": "ily-10k-tracker",
+  "private": true,
+  "description": "A local-first static tracker for the 10,000 hour journey to mastery in any skill.",
+  "scripts": {
+    "start": "npx --yes serve . -p 3000"
+  }
+}
