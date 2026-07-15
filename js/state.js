@@ -67,7 +67,7 @@ function backfillArchivedActivities(skill) {
     });
 }
 
-function migrateSkill(skill) {
+export function migrateSkill(skill) {
     if (!skill.hundredHourBlocks) {
         const block = createHundredHourBlock(1);
         block.loggedHours = { ...(skill.loggedHoursData || {}) };

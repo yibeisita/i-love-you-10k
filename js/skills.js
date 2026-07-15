@@ -3,6 +3,7 @@ import { renderDashboard } from './render.js';
 import { setView } from './views.js';
 import { loadActiveSkillIntoUI } from './ui.js';
 import { resolveTrackerEntryView } from './hundred-hour.js';
+import { t } from './i18n.js';
 
 export function selectSkillTracker(id) {
     appState.activeSkillId = id;
@@ -26,11 +27,11 @@ export function addSkillFromInput() {
 
 export function deleteSkillTracker(id) {
     if (Object.keys(appState.skills).length <= 1) {
-        alert('You should keep at least one active tracking profile.');
+        alert(t('keepOneProfile'));
         return;
     }
 
-    if (!confirm(`Are you sure you want to delete all historical logs for "${appState.skills[id].name}"?`)) {
+    if (!confirm(t('deleteConfirm', { name: appState.skills[id].name }))) {
         return;
     }
 

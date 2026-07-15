@@ -14,14 +14,14 @@
         <div class="skill-select-wrapper">
             <div class="skill-title" id="editable-skill" contenteditable="true">Skill</div>
             <div class="date-stamp">
-                Today<br>
+                <span data-i18n="today">Today</span><br>
                 <span id="live-date"></span><br>
                 <span id="live-time" class="live-time"></span>
             </div>
         </div>
         <div class="stats-counter">
             <span id="hours-logged-count">0</span>
-            <span class="total">/ 10,000 hours</span>
+            <span class="total" data-i18n="totalHours">/ 10,000 hours</span>
         </div>
         <div class="percentage"><span id="calc-percentage">0.00</span>%</div>
     </header>
@@ -39,12 +39,17 @@
                         type="text"
                         class="skill-add-input"
                         id="skill-input"
+                        data-i18n-placeholder="skillInputPlaceholder"
                         placeholder="Type a new skill & press Enter..."
                         maxlength="32"
                         autocomplete="off"
                     />
                 </div>
-                <div class="home-footer">love is discipline</div>
+                <nav class="home-footer-nav" aria-label="Help and settings">
+                    <button type="button" class="home-footer-link" id="nav-faq-btn" data-view="faq" data-i18n="faq">FAQ</button>
+                    <span class="home-footer-divider" aria-hidden="true">/</span>
+                    <button type="button" class="home-footer-link" id="nav-settings-btn" data-view="settings" data-i18n="settings">Settings</button>
+                </nav>
             </div>
         </section>
 
@@ -199,6 +204,36 @@
             </div>
 
             <button type="button" class="begin-next-block-btn" id="complete-reflection-btn" hidden>Begin next 100 hours</button>
+        </section>
+
+        <section id="view-faq" class="view-section prompts-container-view" aria-label="FAQ">
+            <button type="button" class="back-to-dashboard-btn secondary-view-back-btn" data-i18n="backToDashboard">← Back to Dashboard</button>
+            <h2 class="prompts-heading" data-i18n="faqTitle">How to Use This Tracker</h2>
+            <div id="faq-content" class="faq-content"></div>
+        </section>
+
+        <section id="view-settings" class="view-section prompts-container-view" aria-label="Settings">
+            <button type="button" class="back-to-dashboard-btn secondary-view-back-btn" data-i18n="backToDashboard">← Back to Dashboard</button>
+            <h2 class="prompts-heading" data-i18n="settingsTitle">Settings</h2>
+
+            <div class="settings-group">
+                <h3 class="settings-group-title" data-i18n="languageLabel">Language</h3>
+                <div class="language-options" id="language-options">
+                    <button type="button" class="language-option" data-lang="en">English</button>
+                    <button type="button" class="language-option" data-lang="es">Español</button>
+                    <button type="button" class="language-option" data-lang="it">Italiano</button>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3 class="settings-group-title" data-i18n="dataLabel">Your Data</h3>
+                <p class="settings-desc" data-i18n="dataDesc">All progress is stored locally in your browser. Export a backup before switching devices or browsers, then import it here to restore everything.</p>
+                <div class="settings-actions">
+                    <button type="button" class="settings-btn" id="export-data-btn" data-i18n="exportData">Export data</button>
+                    <button type="button" class="settings-btn" id="import-data-btn" data-i18n="importData">Import data</button>
+                    <input type="file" id="import-data-input" accept=".json,application/json" hidden />
+                </div>
+            </div>
         </section>
     </main>
 

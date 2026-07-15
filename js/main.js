@@ -11,13 +11,19 @@ import { openLatestRetrospective } from './retrospective.js';
 import { startLoveCycler } from './home-title.js';
 import { getActiveSkill } from './state.js';
 import { completeBlockAndStartNew } from './hundred-hour.js';
+import { loadPreferences, applyTranslations } from './i18n.js';
+import { initSettings } from './settings.js';
+import { updateHeaderBackLabel } from './views.js';
 
 function initApp() {
+    loadPreferences();
     loadState();
     buildSwatchGrid();
     renderDashboard();
     loadActiveSkillIntoUI();
     startLiveClock();
+    applyTranslations();
+    updateHeaderBackLabel();
 }
 
 function handleCompleteReflection() {
@@ -54,6 +60,13 @@ function bindEvents() {
 
     document.getElementById('complete-reflection-btn').addEventListener('click', handleCompleteReflection);
 
+    document.getElementById('nav-faq-btn')?.addEventListener('click', () => setView('faq'));
+    document.getElementById('nav-settings-btn')?.addEventListener('click', () => setView('settings'));
+
+    document.querySelectorAll('.secondary-view-back-btn').forEach((btn) => {
+        btn.addEventListener('click', () => setView('home'));
+    });
+
     document.addEventListener('click', (event) => {
         const popup = document.getElementById('color-picker-popup');
         if (popup && !popup.contains(event.target) && !event.target.closest('.color-preview-dot')) {
@@ -67,5 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     bindControlsSidebarHeightSync();
     initApp();
     initHomeView();
+    initSettings();
     startLoveCycler();
 });

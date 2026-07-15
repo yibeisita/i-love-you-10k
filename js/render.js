@@ -1,6 +1,7 @@
 import { appState } from './state.js';
 import { escapeHTML, seededRandom } from './utils.js';
 import { getTotalHours } from './hundred-hour.js';
+import { t } from './i18n.js';
 
 const ENTRY_ROW_HEIGHT_REM = 5.5;
 const TITLE_TOP_OFFSET = 'calc(var(--home-title-block-height) + 2.5rem)';
@@ -64,9 +65,9 @@ export function renderDashboard() {
 
         node.innerHTML = `
             <div class="skill-entry-line" style="padding-left: ${line1Indent}px">${entryNumber}  ${escapeHTML(skill.name).toUpperCase()}</div>
-            <div class="skill-entry-line" style="padding-left: ${line2Indent}px">${hoursCount} HOURS LOGGED</div>
+            <div class="skill-entry-line" style="padding-left: ${line2Indent}px">${hoursCount} ${t('hoursLogged')}</div>
             <div class="skill-entry-line" style="padding-left: ${line3Indent}px">${escapeHTML(startDate).toUpperCase()}</div>
-            <button type="button" class="node-delete-btn" title="Delete Profile" aria-label="Delete skill">&times;</button>
+            <button type="button" class="node-delete-btn" title="${t('deleteProfile')}" aria-label="${t('deleteProfile')}">&times;</button>
         `;
 
         container.appendChild(node);

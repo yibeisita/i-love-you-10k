@@ -1,6 +1,9 @@
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
+import { t } from './i18n.js';
 
 let currentActiveView = 'home';
+
+const VIEWS_WITHOUT_HEADER = new Set(['home', 'faq', 'settings']);
 
 function playEnterAnimation(element) {
     if (!element) return;
@@ -11,7 +14,7 @@ function playEnterAnimation(element) {
 }
 
 function animatePromptTitles(viewName) {
-    if (viewName !== 'setup' && viewName !== 'reflection' && viewName !== 'retrospective') return;
+    if (viewName !== 'setup' && viewName !== 'reflection' && viewName !== 'retrospective' && viewName !== 'faq' && viewName !== 'settings') return;
 
     const view = document.getElementById(`view-${viewName}`);
     if (!view) return;
@@ -26,6 +29,18 @@ function animatePromptTitles(viewName) {
 
 export function getCurrentView() {
     return currentActiveView;
+}
+
+export function updateHeaderBackLabel() {
+    if (!shouldShowTrackerHeader(currentActiveView)) return;
+
+    const backBtn = document.getElementById('header-back-btn');
+    if (!backBtn) return;
+
+    backBtn.textContent =
+        currentActiveView === 'setup' || currentActiveView === 'reflection' || currentActiveView === 'retrospective'
+            ? t('returnToTracker')
+            : t('backToDashboard');
 }
 
 export function setView(viewName) {
@@ -46,17 +61,17 @@ export function setView(viewName) {
     const headerBar = document.getElementById('tracker-header');
     const backBtn = document.getElementById('header-back-btn');
 
-    if (viewName === 'home') {
+    if (!shouldShowTrackerHeader(viewName)) {
         headerBar.classList.remove('view-enter');
         headerBar.style.display = 'none';
         return;
     }
 
     headerBar.style.display = 'block';
-    backBtn.innerHTML =
+    backBtn.textContent =
         viewName === 'setup' || viewName === 'reflection' || viewName === 'retrospective'
-            ? '&larr; Return to Log Tracker'
-            : '&larr; Back to Dashboard';
+            ? t('returnToTracker')
+            : t('backToDashboard');
 
     if (wasHome) {
         playEnterAnimation(headerBar);
@@ -77,4 +92,8 @@ export function handleHeaderBack() {
 
 export function initHomeView() {
     playEnterAnimation(document.getElementById('view-home'));
+}
+
+function shouldShowTrackerHeader(viewName) {
+    return !VIEWS_WITHOUT_HEADER.has(viewName);
 }
