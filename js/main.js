@@ -1,6 +1,6 @@
 import { loadState } from './state.js';
 import { startLiveClock } from './clock.js';
-import { setView, handleHeaderBack, initHomeView } from './views.js';
+import { setView, handleHeaderBack, initHomeView, updateHeaderBackLabel } from './views.js';
 import { addSkillFromInput, renameActiveSkill, bindSkillDashboardEvents } from './skills.js';
 import { addActivity, closeColorPicker } from './activities.js';
 import { bindControlsSidebarHeightSync } from './sidebar-layout.js';
@@ -13,7 +13,6 @@ import { completeBlockAndStartNew } from './hundred-hour.js';
 import { loadPreferences, applyTranslations } from './i18n.js';
 import { initSettings } from './settings.js';
 import { initDialog } from './dialog.js';
-import { updateHeaderBackLabel } from './views.js';
 
 function initApp() {
     loadPreferences();
@@ -28,8 +27,14 @@ function handleCompleteReflection() {
     const skill = getActiveSkill();
     if (!skill) return;
 
-    completeBlockAndStartNew(skill);
+    const { skillCompleted } = completeBlockAndStartNew(skill);
     loadActiveSkillIntoUI();
+
+    if (skillCompleted) {
+        setView('landing');
+        return;
+    }
+
     openCurrentReflection();
 }
 

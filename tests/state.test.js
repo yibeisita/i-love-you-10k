@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { STORAGE_KEY } from '../js/constants.js';
 import {
     appState,
+    createHundredHourBlock,
     createInitialSkillData,
     getActiveSkill,
     loadState,
@@ -68,5 +69,28 @@ describe('state persistence', () => {
         expect(legacySkill.hundredHourBlocks[0].reflect.lessons).toBe('Big insight');
         expect(legacySkill.hundredHourBlocks[0].reflect.growth).toBe('New direction');
         expect(legacySkill.reflections).toBeUndefined();
+    });
+
+    it('normalizes skills with 100 completed blocks by trimming extra blocks and stray hours', () => {
+        const skill = createInitialSkillData('Mastery');
+        skill.hundredHourBlocks = Array.from({ length: 101 }, (_, index) => {
+            const block = createHundredHourBlock(index + 1);
+            block.status = 'completed';
+            block.loggedHours = Object.fromEntries(
+                Array.from({ length: 100 }, (_, hourIndex) => [String(hourIndex + 1), 'act0'])
+            );
+            block.reflect.finishDate = '04/10/2026';
+            return block;
+        });
+        skill.currentBlockId = skill.hundredHourBlocks[100].id;
+        skill.loggedHoursData = { '1': 'act1' };
+
+        migrateSkill(skill);
+
+        expect(skill.hundredHourBlocks).toHaveLength(100);
+        expect(skill.hundredHourBlocks.at(-1)?.cycleNumber).toBe(100);
+        expect(skill.loggedHoursData).toEqual({});
+        expect(skill.completedAt).toBe('04/10/2026');
+        expect(skill.currentBlockId).toBe(skill.hundredHourBlocks[99].id);
     });
 });

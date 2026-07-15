@@ -1,6 +1,6 @@
 import { appState } from './state.js';
 import { escapeHTML, seededRandom } from './utils.js';
-import { getTotalHours } from './hundred-hour.js';
+import { getTotalHours, isSkillComplete, getSkillEndDate } from './hundred-hour.js';
 import { t, getLocale } from './i18n.js';
 
 const ENTRY_ROW_HEIGHT_REM = 5.5;
@@ -21,14 +21,17 @@ function skillSeed(id) {
     return parseInt(id.replace(/\D/g, ''), 10) || 0;
 }
 
-function getLineIndents(seed) {
+function getLineIndents(seed, lineCount = 3) {
     const step = (offset) => 10 + Math.round(seededRandom(seed + offset) * 3) * 10;
-    return [0, step(1) + 10, step(2)];
+    const indents = [0, step(1) + 10, step(2)];
+    if (lineCount > 3) {
+        indents.push(step(3) + 5);
+    }
+    return indents;
 }
 
-function formatSkillStartDate(skill) {
-    const raw = skill.hundredHourBlocks?.[0]?.start?.startDate?.trim();
-    if (!raw) return '-';
+function formatSkillDate(raw) {
+    if (!raw?.trim()) return '-';
 
     const parsed = new Date(raw);
     if (!Number.isNaN(parsed.getTime())) {
@@ -38,6 +41,15 @@ function formatSkillStartDate(skill) {
     }
 
     return raw;
+}
+
+function formatSkillStartDate(skill) {
+    const raw = skill.hundredHourBlocks?.[0]?.start?.startDate?.trim();
+    return formatSkillDate(raw);
+}
+
+function formatSkillEndDate(skill) {
+    return formatSkillDate(getSkillEndDate(skill));
 }
 
 export function renderDashboard() {
@@ -50,9 +62,13 @@ export function renderDashboard() {
 
     entries.forEach(([id, skill], index) => {
         const hoursCount = getTotalHours(skill);
+        const complete = isSkillComplete(skill);
         const entryNumber = String(index + 1).padStart(2, '0');
-        const [line1Indent, line2Indent, line3Indent] = getLineIndents(skillSeed(id));
+        const lineCount = complete ? 4 : 3;
+        const indents = getLineIndents(skillSeed(id), lineCount);
         const startDate = formatSkillStartDate(skill);
+        const endDate = complete ? formatSkillEndDate(skill) : '';
+        const titleSuffix = complete ? ' ☆' : '';
 
         const { left, top, row } = getLanePosition(index);
         maxRow = Math.max(maxRow, row);
@@ -64,9 +80,10 @@ export function renderDashboard() {
         node.style.left = `${left * 100}%`;
 
         node.innerHTML = `
-            <div class="skill-entry-line" style="padding-left: ${line1Indent}px">${entryNumber}  ${escapeHTML(skill.name).toUpperCase()}</div>
-            <div class="skill-entry-line" style="padding-left: ${line2Indent}px">${hoursCount} ${t('hoursLogged')}</div>
-            <div class="skill-entry-line" style="padding-left: ${line3Indent}px">${escapeHTML(startDate).toUpperCase()}</div>
+            <div class="skill-entry-line" style="padding-left: ${indents[0]}px">${entryNumber}  ${escapeHTML(skill.name).toUpperCase()}${titleSuffix}</div>
+            <div class="skill-entry-line" style="padding-left: ${indents[1]}px">${hoursCount} ${t('hoursLogged')}</div>
+            <div class="skill-entry-line" style="padding-left: ${indents[2]}px">${escapeHTML(startDate).toUpperCase()}</div>
+            ${complete ? `<div class="skill-entry-line" style="padding-left: ${indents[3]}px">${escapeHTML(endDate).toUpperCase()}</div>` : ''}
             <button type="button" class="node-delete-btn" title="${t('deleteSkill')}" aria-label="${t('deleteSkill')}">&times;</button>
         `;
 

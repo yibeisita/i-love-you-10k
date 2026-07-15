@@ -2,6 +2,7 @@ import { getActiveSkill } from './state.js';
 import { getCompletedBlocks, getBlockMilestoneHours } from './hundred-hour.js';
 import { getActivityGradientForSkill, getActivityLabelForSkill } from './colors.js';
 import { setView } from './views.js';
+import { renderBlockNav } from './block-nav.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
 import { t, tCount } from './i18n.js';
 import {
@@ -201,7 +202,7 @@ function updateRetrospectiveNavState(skill, block) {
 
     mainBtn?.classList.toggle('active', block?.id === latestBlock?.id);
 
-    document.querySelectorAll('.retrospective-block-nav-btn').forEach((btn) => {
+    document.querySelectorAll('#retrospective-block-nav .retrospective-block-nav-btn').forEach((btn) => {
         btn.classList.toggle('active', block && btn.dataset.blockId === block.id);
     });
 
@@ -215,22 +216,17 @@ export function renderRetrospectiveBlockNav(skill) {
     const nav = document.getElementById('retrospective-block-nav');
     if (!nav) return;
 
-    nav.innerHTML = '';
-
     const completed = getRetrospectiveBlocks(skill);
+    const viewingBlock = getViewingRetrospectiveBlock(skill);
     const desc = document.getElementById('sidebar-retrospective-desc');
     if (desc) {
         desc.textContent = formatRetrospectiveDesc(completed.length);
     }
 
-    completed.forEach((block) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'reflection-block-nav-btn retrospective-block-nav-btn';
-        btn.dataset.blockId = block.id;
-        btn.textContent = t('blockLabel', { n: block.cycleNumber });
-        btn.addEventListener('click', () => openRetrospectiveBlock(block.id));
-        nav.appendChild(btn);
+    renderBlockNav(nav, completed, {
+        onSelect: openRetrospectiveBlock,
+        activeBlockId: viewingBlock?.id ?? null,
+        extraButtonClass: 'retrospective-block-nav-btn',
     });
 
     syncControlsSidebarHeight();

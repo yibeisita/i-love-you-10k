@@ -222,6 +222,11 @@ header {
     border: 1px dashed #c4c3bd;
 }
 
+.skill-complete-milestone.milestone-hundred {
+    margin: 0;
+    border: none;
+}
+
 .milestone-label {
     position: relative;
     z-index: 1;
@@ -1162,6 +1167,219 @@ body:has(#view-retrospective.active-view) .tracker-header {
     color: var(--text-muted);
     cursor: pointer;
     width: 100%;
+}
+
+.activity-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 24px;
+}
+
+.activity-summary-label {
+    font-size: 0.95rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.activity-summary-hours {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+#view-landing.skill-completed {
+    grid-template-columns: minmax(120px, 220px) 1fr 1fr;
+    gap: 3rem 5rem;
+    align-items: start;
+    justify-items: stretch;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#view-landing.skill-completed .controls-sidebar {
+    display: contents;
+    max-width: none;
+    max-height: none;
+    overflow: visible;
+}
+
+#view-landing.skill-completed .tracker-grid-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1;
+    grid-row: 1;
+    padding: 0;
+    margin: 0;
+    min-height: 200px;
+    overflow: visible;
+}
+
+#view-landing.skill-completed .skill-complete-milestone {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+    overflow: visible;
+    z-index: 1;
+}
+
+#view-landing.skill-completed .skill-complete-milestone .milestone-label {
+    font-size: 1.05rem;
+}
+
+.skill-complete-milestone.filled {
+    animation: milestone-sun-core 6s ease-in-out infinite;
+}
+
+.skill-complete-milestone.filled::after {
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.25) 30%,
+        transparent 62%
+    );
+    animation: milestone-sun-radiate 6s ease-out infinite;
+    mix-blend-mode: screen;
+}
+
+@keyframes milestone-sun-core {
+    0%,
+    100% {
+        filter: brightness(1) saturate(1);
+        box-shadow:
+            0 0 0 0 rgba(255, 255, 255, 0.35),
+            0 0 28px 10px rgba(255, 255, 255, 0.18);
+    }
+
+    50% {
+        filter: brightness(1.12) saturate(1.06);
+        box-shadow:
+            0 0 0 16px rgba(255, 255, 255, 0),
+            0 0 52px 20px rgba(255, 255, 255, 0.28);
+    }
+}
+
+@keyframes milestone-sun-radiate {
+    0% {
+        transform: scale(1);
+        opacity: 0.75;
+    }
+
+    75% {
+        transform: scale(3.4);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(3.4);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skill-complete-milestone.filled,
+    .skill-complete-milestone.filled::after {
+        animation: none;
+    }
+
+    .skill-complete-milestone.filled {
+        box-shadow: 0 0 28px 10px rgba(255, 255, 255, 0.2);
+    }
+}
+
+#view-landing.skill-completed .sidebar-activities-panel {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+}
+
+#view-landing.skill-completed .sidebar-reflections-panel {
+    grid-column: 3;
+    grid-row: 1;
+    min-width: 0;
+}
+
+#view-landing.skill-completed .activity-select-list {
+    max-height: none;
+    overflow: visible;
+}
+
+#view-landing.skill-completed .sidebar-reflections-panel {
+    overflow: visible;
+}
+
+.block-nav-dropdown {
+    margin-top: 0.15rem;
+}
+
+.block-nav-dropdown-toggle {
+    list-style: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding: 0.15rem 0;
+    user-select: none;
+}
+
+.block-nav-dropdown-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.block-nav-dropdown-toggle::after {
+    content: ' ▾';
+}
+
+.block-nav-dropdown[open] .block-nav-dropdown-toggle::after {
+    content: ' ▴';
+}
+
+.block-nav-dropdown-toggle:hover {
+    text-decoration: underline;
+    color: var(--text-main);
+}
+
+.block-nav-dropdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 0.25rem;
+    max-height: 11rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.block-nav-dropdown-list .reflection-block-nav-btn {
+    padding-left: 0.15rem;
+}
+
+@media (max-width: 860px) {
+    #view-landing.skill-completed {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    #view-landing.skill-completed .tracker-grid-container {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        justify-content: center;
+        min-height: 100px;
+    }
+
+    #view-landing.skill-completed .sidebar-activities-panel {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    #view-landing.skill-completed .sidebar-reflections-panel {
+        grid-column: 2;
+        grid-row: 2;
+    }
 }
 
 .reflections-list {

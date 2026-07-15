@@ -1,4 +1,5 @@
-import { createInitialSkillData } from '../../js/state.js';
+import { createInitialSkillData, createHundredHourBlock } from '../../js/state.js';
+import { getCurrentBlock, completeBlockAndStartNew } from '../../js/hundred-hour.js';
 
 export function createTestSkill(name = 'Piano') {
     return createInitialSkillData(name);
@@ -46,4 +47,30 @@ export function logHours(skill, count, actId = 'act0') {
         skill.loggedHoursData[String(hour)] = actId;
     }
     return skill;
+}
+
+export function createSkillAtFinalBlock(name = 'Piano') {
+    const skill = createTestSkill(name);
+    fillSetupPrompts(skill);
+
+    for (let cycle = 1; cycle < 100; cycle += 1) {
+        const block = getCurrentBlock(skill);
+        fillBlockStart(block);
+        logHours(skill, 100, cycle % 2 === 0 ? 'act0' : 'act1');
+        fillBlockReflect(block);
+        completeBlockAndStartNew(skill);
+    }
+
+    const finalBlock = getCurrentBlock(skill);
+    fillBlockStart(finalBlock);
+    return skill;
+}
+
+export function completeSkillToTenThousand(skill) {
+    const block = getCurrentBlock(skill);
+    if (Object.keys(skill.loggedHoursData || {}).length < 100) {
+        logHours(skill, 100);
+    }
+    fillBlockReflect(block);
+    return completeBlockAndStartNew(skill);
 }

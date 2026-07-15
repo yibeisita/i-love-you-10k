@@ -5,6 +5,7 @@ import { renderDashboard } from './render.js';
 import { assembleTrackerGrid, recalculateCounters } from './tracker.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
 import { t, getColorName } from './i18n.js';
+import { isSkillComplete, getActivityHoursSummary } from './hundred-hour.js';
 
 let pickerTargetId = null;
 
@@ -29,6 +30,11 @@ export function renderActivityList() {
     list.innerHTML = '';
 
     if (!current) return;
+
+    if (isSkillComplete(current)) {
+        renderActivitySummary(current, list);
+        return;
+    }
 
     current.activities.forEach((act) => {
         const gradient = ORB_COLORS[act.colorIndex].gradient;
@@ -63,6 +69,26 @@ export function renderActivityList() {
 
         row.querySelector('.radio-indicator').addEventListener('click', () => selectActivity(act.id));
 
+        list.appendChild(row);
+    });
+
+    syncControlsSidebarHeight();
+}
+
+function renderActivitySummary(skill, list) {
+    const summary = getActivityHoursSummary(skill);
+
+    summary.forEach((entry) => {
+        const gradient = ORB_COLORS[entry.colorIndex].gradient;
+        const row = document.createElement('div');
+        row.className = 'activity-summary-row';
+        row.innerHTML = `
+            <div class="activity-row-left">
+                <div class="color-preview-dot" style="background:${gradient}; border:none;"></div>
+                <span class="activity-summary-label">${escapeHTML(entry.label)}</span>
+            </div>
+            <span class="activity-summary-hours">${t('activitySummaryHours', { hours: entry.hours.toLocaleString() })}</span>
+        `;
         list.appendChild(row);
     });
 

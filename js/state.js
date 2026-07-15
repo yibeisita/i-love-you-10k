@@ -1,6 +1,8 @@
 import { STORAGE_KEY } from './constants.js';
 import { getDefaultActivityLabels } from './i18n.js';
 
+const MAX_BLOCKS = 100;
+
 export const appState = {
     activeSkillId: null,
     skills: {},
@@ -69,6 +71,31 @@ function backfillArchivedActivities(skill) {
     });
 }
 
+function normalizeSkillCompletion(skill) {
+    const completedBlocks = skill.hundredHourBlocks.filter((block) => block.status === 'completed');
+    if (completedBlocks.length < MAX_BLOCKS) return skill;
+
+    skill.hundredHourBlocks = skill.hundredHourBlocks
+        .filter((block) => block.cycleNumber <= MAX_BLOCKS)
+        .sort((a, b) => a.cycleNumber - b.cycleNumber);
+
+    skill.loggedHoursData = {};
+
+    const block100 =
+        skill.hundredHourBlocks.find((block) => block.cycleNumber === MAX_BLOCKS && block.status === 'completed') ??
+        completedBlocks.sort((a, b) => a.cycleNumber - b.cycleNumber).at(-1);
+
+    if (block100) {
+        skill.currentBlockId = block100.id;
+    }
+
+    if (!skill.completedAt) {
+        skill.completedAt = block100?.reflect?.finishDate?.trim() || 'complete';
+    }
+
+    return skill;
+}
+
 export function migrateSkill(skill) {
     if (!skill.hundredHourBlocks) {
         const block = createHundredHourBlock(1);
@@ -89,6 +116,8 @@ export function migrateSkill(skill) {
     }
 
     backfillArchivedActivities(skill);
+    normalizeSkillCompletion(skill);
+
     return skill;
 }
 

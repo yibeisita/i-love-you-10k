@@ -1,6 +1,7 @@
 import { getActiveSkill, saveState } from './state.js';
 import { renderDashboard } from './render.js';
 import { setView } from './views.js';
+import { renderBlockNav } from './block-nav.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
 import { t, tCount } from './i18n.js';
 import {
@@ -9,6 +10,7 @@ import {
     getCompletedBlocks,
     isReflectingSectionUnlocked,
     isBlockReflectComplete,
+    isFinalBlock,
 } from './hundred-hour.js';
 
 let viewingBlockId = null;
@@ -94,6 +96,14 @@ function updateReflectionPageState(skill, block) {
             block.status === 'awaiting-reflection' &&
             isBlockReflectComplete(block);
         completeBtn.hidden = !showComplete;
+
+        if (showComplete && isFinalBlock(block)) {
+            completeBtn.textContent = t('completeSkill', { name: skill.name });
+            completeBtn.removeAttribute('data-i18n');
+        } else {
+            completeBtn.textContent = t('beginNextBlock');
+            completeBtn.setAttribute('data-i18n', 'beginNextBlock');
+        }
     }
 
     BLOCK_START_FIELDS.forEach(({ id }) => {
@@ -113,17 +123,12 @@ export function renderReflectionBlockNav(skill) {
     const nav = document.getElementById('reflection-block-nav');
     if (!nav) return;
 
-    nav.innerHTML = '';
     const completedBlocks = getCompletedBlocks(skill);
+    const viewingBlock = getViewingBlock(skill);
 
-    completedBlocks.forEach((block) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'reflection-block-nav-btn';
-        btn.dataset.blockId = block.id;
-        btn.textContent = t('blockLabel', { n: block.cycleNumber });
-        btn.addEventListener('click', () => openReflectionBlock(block.id));
-        nav.appendChild(btn);
+    renderBlockNav(nav, completedBlocks, {
+        onSelect: openReflectionBlock,
+        activeBlockId: viewingBlock?.id ?? null,
     });
 
     syncControlsSidebarHeight();
@@ -135,7 +140,7 @@ function updateReflectionNavState(skill, block) {
 
     currentBtn?.classList.toggle('active', viewingCurrent);
 
-    document.querySelectorAll('.reflection-block-nav-btn').forEach((btn) => {
+    document.querySelectorAll('#reflection-block-nav .reflection-block-nav-btn').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.blockId === block.id);
     });
 }

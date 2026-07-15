@@ -4,12 +4,23 @@ export function syncControlsSidebarHeight() {
     const tracker = document.getElementById('hour-grid-target');
     const sidebar = document.querySelector('.controls-sidebar');
     const activityList = document.getElementById('activity-list');
-    if (!tracker || !sidebar) return;
+    const landing = document.getElementById('view-landing');
+    if (!sidebar) return;
 
     requestAnimationFrame(() => {
+        const isCompleted = landing?.classList.contains('skill-completed');
+
+        if (isCompleted) {
+            sidebar.style.removeProperty('--tracker-grid-height');
+            sidebar.style.removeProperty('--activity-list-max-height');
+            return;
+        }
+
+        if (!tracker) return;
+
         sidebar.style.setProperty('--tracker-grid-height', `${tracker.offsetHeight}px`);
 
-        const firstRow = activityList?.querySelector('.activity-row');
+        const firstRow = activityList?.querySelector('.activity-row, .activity-summary-row');
         if (!firstRow) return;
 
         const listStyles = getComputedStyle(activityList);
