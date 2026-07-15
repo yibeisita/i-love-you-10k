@@ -6,6 +6,12 @@ const PREFS_KEY = 'cosmic_multi_10k_prefs';
 const DEFAULT_LANGUAGE = 'en';
 const SUPPORTED_LANGUAGES = ['en', 'es', 'it'];
 
+const translationRefreshers = [];
+
+export function onTranslationsApplied(callback) {
+    translationRefreshers.push(callback);
+}
+
 const LOCALE_MAP = {
     en: 'en-US',
     es: 'es-ES',
@@ -127,6 +133,7 @@ export function applyTranslations() {
 
     renderFaqContent();
     updateLanguageButtons();
+    translationRefreshers.forEach((callback) => callback());
 }
 
 function updateLanguageButtons() {

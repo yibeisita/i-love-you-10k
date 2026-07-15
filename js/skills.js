@@ -3,7 +3,6 @@ import { renderDashboard } from './render.js';
 import { setView } from './views.js';
 import { loadActiveSkillIntoUI } from './ui.js';
 import { resolveTrackerEntryView } from './hundred-hour.js';
-import { t } from './i18n.js';
 import { confirmDialog } from './dialog.js';
 
 export function selectSkillTracker(id) {
@@ -30,8 +29,10 @@ export function addSkillFromInput() {
 }
 
 export async function deleteSkillTracker(id) {
-    const confirmed = await confirmDialog(t('deleteConfirm', { name: appState.skills[id].name }), {
-        confirmText: t('deleteSkill'),
+    const confirmed = await confirmDialog({
+        messageKey: 'deleteConfirm',
+        messageVars: { name: appState.skills[id].name },
+        confirmTextKey: 'deleteSkill',
         destructive: true,
     });
     if (!confirmed) return;

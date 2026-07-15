@@ -53,11 +53,11 @@ export function importAllData(file) {
             const parsed = JSON.parse(reader.result);
 
             if (!isValidImportPayload(parsed)) {
-                showToast(t('importInvalid'), 'error');
+                showToast({ messageKey: 'importInvalid', variant: 'error' });
                 return;
             }
 
-            const confirmed = await confirmDialog(t('importConfirm'));
+            const confirmed = await confirmDialog({ messageKey: 'importConfirm' });
             if (!confirmed) return;
 
             applyImportedState(parsed.appState);
@@ -75,9 +75,9 @@ export function importAllData(file) {
                 setView('home');
             }
 
-            showToast(t('importSuccess'), 'success');
+            showToast({ messageKey: 'importSuccess', variant: 'success' });
         } catch {
-            showToast(t('importInvalid'), 'error');
+            showToast({ messageKey: 'importInvalid', variant: 'error' });
         }
     };
 
