@@ -56,16 +56,23 @@ export function renameActiveSkill(newName) {
 export function bindSkillDashboardEvents() {
     const container = document.getElementById('skills-display-list');
 
+    container.addEventListener('mousedown', (event) => {
+        if (event.target.closest('.node-delete-btn')) {
+            event.stopPropagation();
+        }
+    });
+
     container.addEventListener('click', (event) => {
         const deleteBtn = event.target.closest('.node-delete-btn');
         if (deleteBtn) {
+            event.preventDefault();
             event.stopPropagation();
-            const skillId = deleteBtn.closest('.circle-oval')?.dataset.skillId;
+            const skillId = deleteBtn.closest('.skill-entry')?.dataset.skillId;
             if (skillId) deleteSkillTracker(skillId);
             return;
         }
 
-        const node = event.target.closest('.circle-oval');
+        const node = event.target.closest('.skill-entry');
         if (node?.dataset.skillId) {
             selectSkillTracker(node.dataset.skillId);
         }
