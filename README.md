@@ -2,12 +2,16 @@
 
 A local-first static web app for tracking deliberate practice toward 10,000 hours of mastery in any skill. Progress is logged hour by hour, organized into 100-hour reflection cycles, and stored entirely in the browser. Love is a practice and therefore a discipline.
 
+**Access it here:** [https://yibeisita.github.io/i-love-you-10k/](https://yibeisita.github.io/i-love-you-10k/)
+
 ## What it does
 
 - Multi-skill dashboard with color-coded activity logging on a 1–10,000 hour grid
 - Setup prompts (purpose, identity, starting point, endurance, non-negotiables)
 - 100-hour blocks with start and end reflection journals, plus archived retrospective views
 - JSON export/import for backup; no accounts, server, or cloud sync
+
+
 
 ## Tech
 
