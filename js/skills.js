@@ -19,6 +19,9 @@ export function addSkillFromInput() {
 
     const newId = `skill_${Date.now()}`;
     appState.skills[newId] = createInitialSkillData(name);
+    if (!appState.activeSkillId) {
+        appState.activeSkillId = newId;
+    }
     input.value = '';
 
     saveState();
@@ -26,22 +29,25 @@ export function addSkillFromInput() {
 }
 
 export function deleteSkillTracker(id) {
-    if (Object.keys(appState.skills).length <= 1) {
-        alert(t('keepOneProfile'));
-        return;
-    }
-
     if (!confirm(t('deleteConfirm', { name: appState.skills[id].name }))) {
         return;
     }
 
     delete appState.skills[id];
+
+    const remainingIds = Object.keys(appState.skills);
     if (appState.activeSkillId === id) {
-        appState.activeSkillId = Object.keys(appState.skills)[0];
+        appState.activeSkillId = remainingIds[0] ?? null;
     }
 
     saveState();
     renderDashboard();
+
+    if (remainingIds.length === 0) {
+        setView('home');
+        return;
+    }
+
     loadActiveSkillIntoUI();
 }
 

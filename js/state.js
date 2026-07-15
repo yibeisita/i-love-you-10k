@@ -94,9 +94,14 @@ export function loadState() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
         const parsed = JSON.parse(saved);
-        appState.activeSkillId = parsed.activeSkillId;
-        appState.skills = parsed.skills;
+        appState.activeSkillId = parsed.activeSkillId ?? null;
+        appState.skills = parsed.skills ?? {};
         Object.values(appState.skills).forEach(migrateSkill);
+
+        if (appState.activeSkillId && !appState.skills[appState.activeSkillId]) {
+            const remainingIds = Object.keys(appState.skills);
+            appState.activeSkillId = remainingIds[0] ?? null;
+        }
         return;
     }
 
