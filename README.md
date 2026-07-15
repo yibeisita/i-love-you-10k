@@ -34,3 +34,9 @@ tests/              # vitest suites
 ```
 
 Core state: skills with activities, logged hours, setup prompts, and up to 100 completed 100-hour blocks per skill.
+
+## License and contributing
+
+Licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE). You may use, study, and modify this project for noncommercial purposes. Commercial use and selling products or services based on this project are not allowed without permission.
+
+Contributions via issues and pull requests are welcome. By contributing, you agree your work may be included under the same license. 
