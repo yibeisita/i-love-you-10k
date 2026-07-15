@@ -69,8 +69,8 @@
                         <button type="button" class="reflection-item" data-view="setup">
                             <div class="reflection-number">01</div>
                             <div class="reflection-content">
-                                <div class="reflection-title" data-i18n="setupTitle">Where The Work Begins</div>
-                                <div class="reflection-desc" data-i18n="setupDesc">Purpose, identity, starting point &amp; non-negotiables</div>
+                                <div class="reflection-title" data-i18n="setupTitle">Where Intention Becomes Practice</div>
+                                <div class="reflection-desc" data-i18n="setupDesc">Purpose, identity, starting point, endurance &amp; non-negotiables</div>
                             </div>
                         </button>
                         <div class="reflection-group">
@@ -104,30 +104,30 @@
         </section>
 
         <section id="view-setup" class="view-section prompts-container-view" aria-label="Setup prompts">
-            <h2 class="prompts-heading" data-i18n="setupTitle">Where The Work Begins</h2>
+            <h2 class="prompts-heading" data-i18n="setupTitle">Where Intention Becomes Practice</h2>
             <div class="minimal-prompt-card">
                 <label for="setup-purpose" data-i18n="setupPurpose">Purpose</label>
-                <span class="desc" data-i18n="setupPurposeDesc">Why this journey matters.</span>
+                <span class="desc" data-i18n="setupPurposeDesc">Why this matters to me.</span>
                 <textarea id="setup-purpose" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
             <div class="minimal-prompt-card">
                 <label for="setup-identity" data-i18n="setupIdentity">Identity</label>
-                <span class="desc" data-i18n="setupIdentityDesc">Who I hope to become through this practice.</span>
+                <span class="desc" data-i18n="setupIdentityDesc">Who I want to become by doing this.</span>
                 <textarea id="setup-identity" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
             <div class="minimal-prompt-card">
                 <label for="setup-starting" data-i18n="setupStarting">Starting Point</label>
-                <span class="desc" data-i18n="setupStartingDesc">My current level, strengths, and blind spots as I begin.</span>
+                <span class="desc" data-i18n="setupStartingDesc">Where I'm starting from: my strengths, gaps, and blind spots.</span>
                 <textarea id="setup-starting" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
             <div class="minimal-prompt-card">
                 <label for="setup-endurance" data-i18n="setupEndurance">Endurance</label>
-                <span class="desc" data-i18n="setupEnduranceDesc">The discomfort, boredom, or challenges I'm prepared to push through.</span>
+                <span class="desc" data-i18n="setupEnduranceDesc">The discomfort and boredom I'm willing to sit with.</span>
                 <textarea id="setup-endurance" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
             <div class="minimal-prompt-card">
                 <label for="setup-negotiables" data-i18n="setupNegotiables">Non-Negotiables</label>
-                <span class="desc" data-i18n="setupNegotiablesDesc">The values, boundaries, or parts of myself I refuse to compromise.</span>
+                <span class="desc" data-i18n="setupNegotiablesDesc">The values and boundaries I won't trade away.</span>
                 <textarea id="setup-negotiables" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
         </section>
@@ -236,6 +236,19 @@
             </div>
         </section>
     </main>
+
+    <div id="app-dialog" class="app-dialog" hidden>
+        <div class="app-dialog-backdrop"></div>
+        <div class="app-dialog-panel" role="alertdialog" aria-modal="true" aria-labelledby="app-dialog-message">
+            <p class="app-dialog-message" id="app-dialog-message"></p>
+            <div class="app-dialog-actions">
+                <button type="button" class="app-dialog-btn app-dialog-cancel"></button>
+                <button type="button" class="app-dialog-btn app-dialog-confirm"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-toast" class="app-toast" role="status" aria-live="polite" hidden></div>
 
     <div id="color-picker-popup" class="color-picker-popup" role="dialog" data-i18n-aria="chooseColour" aria-label="Choose colour">
         <div class="color-picker-title" data-i18n="chooseColour">Choose colour</div>

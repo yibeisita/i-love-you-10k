@@ -4,6 +4,7 @@ import { setView } from './views.js';
 import { loadActiveSkillIntoUI } from './ui.js';
 import { resolveTrackerEntryView } from './hundred-hour.js';
 import { t } from './i18n.js';
+import { confirmDialog } from './dialog.js';
 
 export function selectSkillTracker(id) {
     appState.activeSkillId = id;
@@ -28,10 +29,12 @@ export function addSkillFromInput() {
     renderDashboard();
 }
 
-export function deleteSkillTracker(id) {
-    if (!confirm(t('deleteConfirm', { name: appState.skills[id].name }))) {
-        return;
-    }
+export async function deleteSkillTracker(id) {
+    const confirmed = await confirmDialog(t('deleteConfirm', { name: appState.skills[id].name }), {
+        confirmText: t('deleteSkill'),
+        destructive: true,
+    });
+    if (!confirmed) return;
 
     delete appState.skills[id];
 

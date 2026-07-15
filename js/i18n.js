@@ -1,5 +1,6 @@
 import { escapeHTML } from './utils.js';
 import { UI_STRINGS, FAQ_SECTIONS, COLOR_NAME_KEYS } from './i18n-strings.js';
+import { CONTACT_EMAIL, GITHUB_REPO_URL } from './constants.js';
 
 const PREFS_KEY = 'cosmic_multi_10k_prefs';
 const DEFAULT_LANGUAGE = 'en';
@@ -75,6 +76,20 @@ export function getFaqSections() {
     return FAQ_SECTIONS[currentLanguage] ?? FAQ_SECTIONS.en;
 }
 
+function formatFaqBody(body) {
+    const emailLink = `<a class="faq-email-link" href="mailto:${CONTACT_EMAIL}">${escapeHTML(CONTACT_EMAIL)}</a>`;
+    const repoLink = `<a class="faq-external-link" href="${GITHUB_REPO_URL}" target="_blank" rel="noopener noreferrer">GitHub</a>`;
+
+    return body
+        .split(/(\{email\}|\{repoLink\})/)
+        .map((part) => {
+            if (part === '{email}') return emailLink;
+            if (part === '{repoLink}') return repoLink;
+            return escapeHTML(part);
+        })
+        .join('');
+}
+
 export function renderFaqContent() {
     const container = document.getElementById('faq-content');
     if (!container) return;
@@ -84,7 +99,7 @@ export function renderFaqContent() {
             (section) => `
             <article class="faq-section">
                 <h3 class="faq-section-title">${escapeHTML(section.title)}</h3>
-                <p class="faq-section-body">${escapeHTML(section.body)}</p>
+                <p class="faq-section-body">${formatFaqBody(section.body)}</p>
             </article>
         `,
         )

@@ -56,6 +56,6 @@ export function playPunchSound() {
         thud.start(now);
         thud.stop(now + 0.1);
     } catch {
-        // Audio unavailable — fail silently
+        // Audio unavailable; fail silently
     }
 }

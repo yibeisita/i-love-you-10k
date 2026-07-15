@@ -848,6 +848,132 @@ body:has(#view-retrospective.active-view) .tracker-header {
     margin: 0;
 }
 
+.faq-email-link {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.faq-email-link:hover {
+    text-decoration: underline;
+}
+
+.faq-external-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+}
+
+.faq-external-link:hover {
+    color: var(--text-main);
+}
+
+.app-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.app-dialog[hidden] {
+    display: none;
+}
+
+.app-dialog-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(4px);
+}
+
+.app-dialog-panel {
+    position: relative;
+    width: min(100%, 24rem);
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+
+.app-dialog-message {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-main);
+    margin-bottom: 1.25rem;
+}
+
+.app-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.app-dialog-btn {
+    background: none;
+    border: 1px solid #d4d3cc;
+    border-radius: 20px;
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.app-dialog-btn:hover {
+    color: var(--text-main);
+    border-color: var(--text-muted);
+}
+
+.app-dialog-btn.destructive {
+    color: var(--text-main);
+    border-color: var(--text-main);
+}
+
+.app-dialog-btn.destructive:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.app-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 2rem;
+    z-index: 350;
+    transform: translate(-50%, 1rem);
+    max-width: min(calc(100vw - 2rem), 28rem);
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    background: var(--bg-color);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-main);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.app-toast[hidden] {
+    display: none;
+}
+
+.app-toast[data-visible='true'] {
+    opacity: 1;
+    transform: translate(-50%, 0);
+    pointer-events: auto;
+}
+
+.app-toast[data-variant='success'] {
+    border-color: #b8dcc4;
+}
+
+.app-toast[data-variant='error'] {
+    border-color: #e3b8b8;
+}
+
 .settings-group {
     margin-bottom: 2.5rem;
 }

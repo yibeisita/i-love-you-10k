@@ -1,5 +1,8 @@
 export const STORAGE_KEY = 'cosmic_multi_10k_state';
 
+export const CONTACT_EMAIL = 'yibeiwangchen@gmail.com';
+export const GITHUB_REPO_URL = 'https://github.com/yibeisita/i-love-you-10.000';
+
 export const RETROSPECTIVE_HOUR_COUNT = 100;
 export const RETROSPECTIVE_STANDARD_COLUMNS = 11;
 export const RETROSPECTIVE_GRID_COLUMNS = 12;

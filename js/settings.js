@@ -3,6 +3,7 @@ import { getPreferences, setLanguage, t, applyTranslations } from './i18n.js';
 import { renderDashboard } from './render.js';
 import { loadActiveSkillIntoUI, refreshDynamicUI } from './ui.js';
 import { getCurrentView, setView, updateHeaderBackLabel } from './views.js';
+import { confirmDialog, showToast } from './dialog.js';
 
 const EXPORT_VERSION = 1;
 
@@ -47,16 +48,17 @@ function applyImportedState(imported) {
 export function importAllData(file) {
     const reader = new FileReader();
 
-    reader.onload = () => {
+    reader.onload = async () => {
         try {
             const parsed = JSON.parse(reader.result);
 
             if (!isValidImportPayload(parsed)) {
-                alert(t('importInvalid'));
+                showToast(t('importInvalid'), 'error');
                 return;
             }
 
-            if (!confirm(t('importConfirm'))) return;
+            const confirmed = await confirmDialog(t('importConfirm'));
+            if (!confirmed) return;
 
             applyImportedState(parsed.appState);
 
@@ -73,9 +75,9 @@ export function importAllData(file) {
                 setView('home');
             }
 
-            alert(t('importSuccess'));
+            showToast(t('importSuccess'), 'success');
         } catch {
-            alert(t('importInvalid'));
+            showToast(t('importInvalid'), 'error');
         }
     };
 

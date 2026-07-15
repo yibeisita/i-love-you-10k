@@ -12,6 +12,7 @@ import { getActiveSkill } from './state.js';
 import { completeBlockAndStartNew } from './hundred-hour.js';
 import { loadPreferences, applyTranslations } from './i18n.js';
 import { initSettings } from './settings.js';
+import { initDialog } from './dialog.js';
 import { updateHeaderBackLabel } from './views.js';
 
 function initApp() {
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     bindControlsSidebarHeightSync();
     initApp();
     initHomeView();
+    initDialog();
     initSettings();
     startLoveCycler();
 });

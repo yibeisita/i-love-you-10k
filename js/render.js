@@ -28,7 +28,7 @@ function getLineIndents(seed) {
 
 function formatSkillStartDate(skill) {
     const raw = skill.hundredHourBlocks?.[0]?.start?.startDate?.trim();
-    if (!raw) return '—';
+    if (!raw) return '-';
 
     const parsed = new Date(raw);
     if (!Number.isNaN(parsed.getTime())) {
@@ -67,7 +67,7 @@ export function renderDashboard() {
             <div class="skill-entry-line" style="padding-left: ${line1Indent}px">${entryNumber}  ${escapeHTML(skill.name).toUpperCase()}</div>
             <div class="skill-entry-line" style="padding-left: ${line2Indent}px">${hoursCount} ${t('hoursLogged')}</div>
             <div class="skill-entry-line" style="padding-left: ${line3Indent}px">${escapeHTML(startDate).toUpperCase()}</div>
-            <button type="button" class="node-delete-btn" title="${t('deleteProfile')}" aria-label="${t('deleteProfile')}">&times;</button>
+            <button type="button" class="node-delete-btn" title="${t('deleteSkill')}" aria-label="${t('deleteSkill')}">&times;</button>
         `;
 
         container.appendChild(node);
