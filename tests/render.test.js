@@ -20,6 +20,7 @@ describe('dashboard rendering', () => {
         renderDashboard();
 
         const entry = document.querySelector('.skill-entry');
+        expect(entry?.classList.contains('skill-entry-complete')).toBe(true);
         expect(entry?.textContent).toContain('PIANO ☆');
         expect(entry?.querySelectorAll('.skill-entry-line')).toHaveLength(4);
         expect(entry?.textContent).toContain('10000');
@@ -36,6 +37,7 @@ describe('dashboard rendering', () => {
         renderDashboard();
 
         const entry = document.querySelector('.skill-entry');
+        expect(entry?.classList.contains('skill-entry-complete')).toBe(false);
         expect(entry?.textContent).toContain('GUITAR');
         expect(entry?.textContent).not.toContain('☆');
         expect(entry?.querySelectorAll('.skill-entry-line')).toHaveLength(3);

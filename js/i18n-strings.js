@@ -1,3 +1,5 @@
+import { EXTENDED_ORB_PALETTE, EXTENDED_COLOR_LABELS } from './orb-palette.js';
+
 export const UI_STRINGS = {
     en: {
         pageTitle: 'I LOVE YOU 10,000',
@@ -86,8 +88,6 @@ export const UI_STRINGS = {
         langEs: 'Español',
         langIt: 'Italiano',
         colorTeal: 'Teal',
-        colorMint: 'Mint',
-        colorAqua: 'Aqua',
         colorSeafoam: 'Seafoam',
         colorSkyBlue: 'Sky Blue',
         colorPeriwinkle: 'Periwinkle',
@@ -102,6 +102,7 @@ export const UI_STRINGS = {
         colorOrange: 'Orange',
         colorYellow: 'Yellow',
         colorChartreuse: 'Chartreuse',
+        ...EXTENDED_COLOR_LABELS.en,
     },
     es: {
         pageTitle: 'TE QUIERO 10.000',
@@ -190,8 +191,6 @@ export const UI_STRINGS = {
         langEs: 'Español',
         langIt: 'Italiano',
         colorTeal: 'Verde azulado',
-        colorMint: 'Menta',
-        colorAqua: 'Aguamarina',
         colorSeafoam: 'Espuma de mar',
         colorSkyBlue: 'Azul cielo',
         colorPeriwinkle: 'Azul lavanda',
@@ -206,6 +205,7 @@ export const UI_STRINGS = {
         colorOrange: 'Naranja',
         colorYellow: 'Amarillo',
         colorChartreuse: 'Chartreuse',
+        ...EXTENDED_COLOR_LABELS.es,
     },
     it: {
         pageTitle: 'TI AMO 10.000',
@@ -294,8 +294,6 @@ export const UI_STRINGS = {
         langEs: 'Español',
         langIt: 'Italiano',
         colorTeal: 'Verde acqua',
-        colorMint: 'Menta',
-        colorAqua: 'Acqua',
         colorSeafoam: 'Schiuma marina',
         colorSkyBlue: 'Azzurro',
         colorPeriwinkle: 'Viola pervinca',
@@ -310,13 +308,12 @@ export const UI_STRINGS = {
         colorOrange: 'Arancione',
         colorYellow: 'Giallo',
         colorChartreuse: 'Chartreuse',
+        ...EXTENDED_COLOR_LABELS.it,
     },
 };
 
 export const COLOR_NAME_KEYS = [
     'colorTeal',
-    'colorMint',
-    'colorAqua',
     'colorSeafoam',
     'colorSkyBlue',
     'colorPeriwinkle',
@@ -331,6 +328,7 @@ export const COLOR_NAME_KEYS = [
     'colorOrange',
     'colorYellow',
     'colorChartreuse',
+    ...EXTENDED_ORB_PALETTE.map(({ key }) => key),
 ];
 
 export const FAQ_SECTIONS = {

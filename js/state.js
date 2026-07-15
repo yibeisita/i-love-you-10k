@@ -1,7 +1,9 @@
 import { STORAGE_KEY } from './constants.js';
 import { getDefaultActivityLabels } from './i18n.js';
+import { migrateLegacyColorIndex } from './orb-palette.js';
 
 const MAX_BLOCKS = 100;
+const COLOR_PALETTE_VERSION = 2;
 
 export const appState = {
     activeSkillId: null,
@@ -46,13 +48,14 @@ export function createInitialSkillData(name) {
         activeActivityId: 'act0',
         activities: [
             { id: 'act0', label: practice, colorIndex: 0 },
-            { id: 'act1', label: theory, colorIndex: 4 },
-            { id: 'act2', label: freeFlow, colorIndex: 11 },
+            { id: 'act1', label: theory, colorIndex: 2 },
+            { id: 'act2', label: freeFlow, colorIndex: 9 },
         ],
         loggedHoursData: {},
         prompts: { purpose: '', identity: '', starting: '', endurance: '', negotiables: '' },
         currentBlockId: block.id,
         hundredHourBlocks: [block],
+        colorPaletteVersion: COLOR_PALETTE_VERSION,
     };
 }
 
@@ -96,6 +99,23 @@ function normalizeSkillCompletion(skill) {
     return skill;
 }
 
+function migrateColorPalette(skill) {
+    if ((skill.colorPaletteVersion ?? 1) >= COLOR_PALETTE_VERSION) return skill;
+
+    skill.activities?.forEach((activity) => {
+        activity.colorIndex = migrateLegacyColorIndex(activity.colorIndex);
+    });
+
+    skill.hundredHourBlocks?.forEach((block) => {
+        block.archivedActivities?.forEach((activity) => {
+            activity.colorIndex = migrateLegacyColorIndex(activity.colorIndex);
+        });
+    });
+
+    skill.colorPaletteVersion = COLOR_PALETTE_VERSION;
+    return skill;
+}
+
 export function migrateSkill(skill) {
     if (!skill.hundredHourBlocks) {
         const block = createHundredHourBlock(1);
@@ -116,6 +136,7 @@ export function migrateSkill(skill) {
     }
 
     backfillArchivedActivities(skill);
+    migrateColorPalette(skill);
     normalizeSkillCompletion(skill);
 
     return skill;

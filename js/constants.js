@@ -1,3 +1,5 @@
+import { createOrbGradient, EXTENDED_ORB_PALETTE } from './orb-palette.js';
+
 export const STORAGE_KEY = 'cosmic_multi_10k_state';
 
 export const CONTACT_EMAIL = 'yibeiwangchen@gmail.com';
@@ -9,10 +11,8 @@ export const RETROSPECTIVE_GRID_COLUMNS = 12;
 export const RETROSPECTIVE_ROWS = 9;
 export const RETROSPECTIVE_MILESTONE_SCALE = 2;
 
-export const ORB_COLORS = [
+const LEGACY_ORB_COLORS = [
     { name: 'Teal', gradient: 'radial-gradient(circle at 48% 50%, #52c7c1 0%, #8cd8d3 30%, #c4e9e4 65%, #e9f4ef 100%)' },
-    { name: 'Mint', gradient: 'radial-gradient(circle at 48% 50%, #58c6c3 0%, #90d7d4 30%, #c6e8e5 65%, #e9f3f0 100%)' },
-    { name: 'Aqua', gradient: 'radial-gradient(circle at 48% 50%, #75ceca 0%, #a3ddd9 30%, #cfebe7 65%, #ecf4f0 100%)' },
     { name: 'Seafoam', gradient: 'radial-gradient(circle at 48% 50%, #5ccbc4 0%, #93dbd5 30%, #c7eae5 65%, #eaf4f0 100%)' },
     { name: 'Sky Blue', gradient: 'radial-gradient(circle at 48% 50%, #98caed 0%, #badaef 30%, #dae9f2 65%, #f0f4f4 100%)' },
     { name: 'Periwinkle', gradient: 'radial-gradient(circle at 48% 50%, #85bfff 0%, #add3fb 30%, #d4e6f8 65%, #eef3f6 100%)' },
@@ -28,6 +28,14 @@ export const ORB_COLORS = [
     { name: 'Yellow', gradient: 'radial-gradient(circle at 48% 50%, #ecee66 0%, #f0f198 30%, #f5f5c7 65%, #f8f7e6 100%)' },
     { name: 'Chartreuse', gradient: 'radial-gradient(circle at 48% 50%, #fefcb1 0%, #fcfac8 30%, #fbf9df 65%, #faf9ee 100%)' },
 ];
+
+const EXTENDED_ORB_COLORS = EXTENDED_ORB_PALETTE.map(({ key, hex }) => ({
+    name: key,
+    hex,
+    gradient: createOrbGradient(hex),
+}));
+
+export const ORB_COLORS = [...LEGACY_ORB_COLORS, ...EXTENDED_ORB_COLORS];
 
 export const LOVE_PHRASES = [
     { line1: 'i love you', line2: '10,000' },

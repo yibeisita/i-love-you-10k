@@ -74,7 +74,7 @@ export function renderDashboard() {
         maxRow = Math.max(maxRow, row);
 
         const node = document.createElement('div');
-        node.className = 'skill-entry';
+        node.className = complete ? 'skill-entry skill-entry-complete' : 'skill-entry';
         node.dataset.skillId = id;
         node.style.top = top;
         node.style.left = `${left * 100}%`;

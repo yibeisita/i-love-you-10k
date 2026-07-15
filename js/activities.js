@@ -1,4 +1,5 @@
 import { ORB_COLORS } from './constants.js';
+import { getSwatchDisplayOrder } from './orb-palette.js';
 import { getActiveSkill, saveState } from './state.js';
 import { escapeHTML } from './utils.js';
 import { renderDashboard } from './render.js';
@@ -13,12 +14,14 @@ export function buildSwatchGrid() {
     const grid = document.getElementById('color-swatch-grid');
     grid.innerHTML = '';
 
-    ORB_COLORS.forEach((orb, index) => {
+    getSwatchDisplayOrder(ORB_COLORS.length).forEach((index) => {
+        const orb = ORB_COLORS[index];
         const swatch = document.createElement('button');
         swatch.type = 'button';
         swatch.className = 'color-swatch';
         swatch.style.background = orb.gradient;
         swatch.title = getColorName(index);
+        swatch.dataset.colorIndex = String(index);
         swatch.addEventListener('click', () => assignColorToActivity(index));
         grid.appendChild(swatch);
     });
@@ -174,7 +177,8 @@ export function openColorPicker(event, actId) {
     popup.classList.add('visible');
 
     const act = getActiveSkill().activities.find((a) => a.id === actId);
-    document.querySelectorAll('.color-swatch').forEach((swatch, index) => {
+    document.querySelectorAll('.color-swatch').forEach((swatch) => {
+        const index = Number(swatch.dataset.colorIndex);
         swatch.classList.toggle('selected', index === act.colorIndex);
     });
 

@@ -33,7 +33,7 @@ describe('tracker milestone UI', () => {
         expect(circle.classList.contains('hour-circle-readonly')).toBe(true);
         expect(circle.classList.contains('filled')).toBe(true);
         expect(circle.dataset.actId).toBe('act2');
-        expect(circle.style.background).toBe(ORB_COLORS[11].gradient);
+        expect(circle.style.background).toBe(ORB_COLORS[9].gradient);
         expect(circle.querySelector('.milestone-label')?.textContent).toBe('10000');
         expect(circle.getAttribute('aria-label')).toBe('10000');
     });

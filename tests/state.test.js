@@ -25,6 +25,7 @@ describe('state persistence', () => {
         expect(skill.hundredHourBlocks).toHaveLength(1);
         expect(skill.hundredHourBlocks[0].status).toBe('active');
         expect(skill.currentBlockId).toBe(skill.hundredHourBlocks[0].id);
+        expect(skill.activities.map((activity) => activity.colorIndex)).toEqual([0, 2, 9]);
     });
 
     it('saves and loads app state from localStorage', () => {
@@ -92,5 +93,18 @@ describe('state persistence', () => {
         expect(skill.loggedHoursData).toEqual({});
         expect(skill.completedAt).toBe('04/10/2026');
         expect(skill.currentBlockId).toBe(skill.hundredHourBlocks[99].id);
+    });
+
+    it('remaps legacy mint and aqua color indices on migrate', () => {
+        const skill = createInitialSkillData('Colors');
+        skill.colorPaletteVersion = 1;
+        skill.activities[0].colorIndex = 1;
+        skill.activities[1].colorIndex = 4;
+        skill.activities[2].colorIndex = 11;
+
+        migrateSkill(skill);
+
+        expect(skill.activities.map((activity) => activity.colorIndex)).toEqual([0, 2, 9]);
+        expect(skill.colorPaletteVersion).toBe(2);
     });
 });

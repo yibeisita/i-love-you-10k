@@ -694,6 +694,10 @@ body:has(#view-retrospective.active-view) .tracker-header {
     z-index: 1;
 }
 
+.skill-entry-complete {
+    color: #767672;
+}
+
 .skill-entry:hover,
 .skill-entry:has(.node-delete-btn:hover),
 .skill-entry:has(.node-delete-btn:focus-visible) {
@@ -1069,7 +1073,8 @@ body:has(#view-retrospective.active-view) .tracker-header {
     border-radius: 12px;
     padding: 0.75rem;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    width: 220px;
+    width: max-content;
+    max-width: 280px;
 }
 
 .color-picker-popup.visible {
@@ -1087,13 +1092,13 @@ body:has(#view-retrospective.active-view) .tracker-header {
 
 .color-swatch-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
+    grid-template-columns: repeat(9, 22px);
+    gap: 4px;
 }
 
 .color-swatch {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     cursor: pointer;
     border: none;
@@ -1101,7 +1106,8 @@ body:has(#view-retrospective.active-view) .tracker-header {
 }
 
 .color-swatch:hover {
-    transform: scale(1.2);
+    transform: scale(1.15);
+    z-index: 1;
 }
 
 .color-swatch.selected {
