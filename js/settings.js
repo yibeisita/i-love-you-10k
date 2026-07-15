@@ -7,14 +7,14 @@ import { confirmDialog, showToast } from './dialog.js';
 
 const EXPORT_VERSION = 1;
 
-function isValidImportPayload(data) {
-    return (
+export function isValidImportPayload(data) {
+    return Boolean(
         data &&
-        typeof data === 'object' &&
-        data.appState &&
-        typeof data.appState === 'object' &&
-        data.appState.skills &&
-        typeof data.appState.skills === 'object'
+            typeof data === 'object' &&
+            data.appState &&
+            typeof data.appState === 'object' &&
+            data.appState.skills &&
+            typeof data.appState.skills === 'object',
     );
 }
 

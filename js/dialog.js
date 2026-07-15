@@ -9,23 +9,25 @@ let dialogKeyHandler = null;
 let activeDialog = null;
 let activeToast = null;
 
+let dialogInitialized = false;
+
 function getDialogRoot() {
-    if (dialogRoot) return dialogRoot;
+    const el = document.getElementById('app-dialog');
+    if (!el) return null;
 
-    dialogRoot = document.getElementById('app-dialog');
-    if (!dialogRoot) return null;
-
-    dialogRoot.querySelector('.app-dialog-backdrop')?.addEventListener('click', () => closeDialog(false));
-    dialogRoot.querySelector('.app-dialog-cancel')?.addEventListener('click', () => closeDialog(false));
-    dialogRoot.querySelector('.app-dialog-confirm')?.addEventListener('click', () => closeDialog(true));
+    if (dialogRoot !== el) {
+        dialogRoot = el;
+        dialogRoot.querySelector('.app-dialog-backdrop')?.addEventListener('click', () => closeDialog(false));
+        dialogRoot.querySelector('.app-dialog-cancel')?.addEventListener('click', () => closeDialog(false));
+        dialogRoot.querySelector('.app-dialog-confirm')?.addEventListener('click', () => closeDialog(true));
+    }
 
     return dialogRoot;
 }
 
 function getToastRoot() {
-    if (!toastRoot) {
-        toastRoot = document.getElementById('app-toast');
-    }
+    const el = document.getElementById('app-toast');
+    if (el) toastRoot = el;
     return toastRoot;
 }
 
@@ -156,6 +158,9 @@ export function refreshToastTranslations() {
 
 export function initDialog() {
     getDialogRoot();
+
+    if (dialogInitialized) return;
+    dialogInitialized = true;
 
     onTranslationsApplied(() => {
         refreshDialogTranslations();

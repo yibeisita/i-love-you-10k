@@ -1,0 +1,72 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+import { STORAGE_KEY } from '../js/constants.js';
+import {
+    appState,
+    createInitialSkillData,
+    getActiveSkill,
+    loadState,
+    migrateSkill,
+    saveState,
+} from '../js/state.js';
+
+describe('state persistence', () => {
+    beforeEach(() => {
+        localStorage.clear();
+        appState.activeSkillId = null;
+        appState.skills = {};
+    });
+
+    it('creates a skill with default activities and an active block', () => {
+        const skill = createInitialSkillData('Violin');
+
+        expect(skill.name).toBe('Violin');
+        expect(skill.activities).toHaveLength(3);
+        expect(skill.hundredHourBlocks).toHaveLength(1);
+        expect(skill.hundredHourBlocks[0].status).toBe('active');
+        expect(skill.currentBlockId).toBe(skill.hundredHourBlocks[0].id);
+    });
+
+    it('saves and loads app state from localStorage', () => {
+        const skill = createInitialSkillData('Drawing');
+        appState.skills.skill_1 = skill;
+        appState.activeSkillId = 'skill_1';
+
+        saveState();
+
+        appState.activeSkillId = null;
+        appState.skills = {};
+        loadState();
+
+        expect(appState.activeSkillId).toBe('skill_1');
+        expect(getActiveSkill()?.name).toBe('Drawing');
+        expect(localStorage.getItem(STORAGE_KEY)).toContain('"Drawing"');
+    });
+
+    it('creates a default skill when no saved state exists', () => {
+        loadState();
+
+        expect(appState.activeSkillId).toBeTruthy();
+        expect(Object.keys(appState.skills)).toHaveLength(1);
+        expect(getActiveSkill()?.name).toBe('Italian');
+    });
+
+    it('migrates legacy skill data into hundred-hour blocks', () => {
+        const legacySkill = {
+            name: 'Legacy Skill',
+            actIdCounter: 5,
+            activeActivityId: 'act0',
+            activities: [{ id: 'act0', label: 'Practice', colorIndex: 0 }],
+            loggedHoursData: Object.fromEntries(Array.from({ length: 100 }, (_, i) => [String(i + 1), 'act0'])),
+            prompts: { purpose: '', identity: '', starting: '', endurance: '', negotiables: '' },
+            reflections: { breakthrough: 'Big insight', pivot: 'New direction' },
+        };
+
+        migrateSkill(legacySkill);
+
+        expect(legacySkill.hundredHourBlocks).toHaveLength(1);
+        expect(legacySkill.hundredHourBlocks[0].status).toBe('awaiting-reflection');
+        expect(legacySkill.hundredHourBlocks[0].reflect.lessons).toBe('Big insight');
+        expect(legacySkill.hundredHourBlocks[0].reflect.growth).toBe('New direction');
+        expect(legacySkill.reflections).toBeUndefined();
+    });
+});
