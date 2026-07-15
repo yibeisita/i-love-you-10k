@@ -689,7 +689,8 @@ body:has(#view-retrospective.active-view) .tracker-header {
     text-transform: uppercase;
     color: #111;
     cursor: pointer;
-    width: fit-content;
+    box-sizing: border-box;
+    width: max-content;
     max-width: min(100%, 22rem);
     z-index: 1;
 }
@@ -705,7 +706,11 @@ body:has(#view-retrospective.active-view) .tracker-header {
 }
 
 .skill-entry-line {
+    min-width: 0;
+    max-width: 100%;
     line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
     transition: opacity 0.2s ease;
 }
@@ -755,7 +760,7 @@ body:has(#view-retrospective.active-view) .tracker-header {
 @media (max-width: 720px) {
     .skill-entry {
         left: 0 !important;
-        max-width: 100%;
+        max-width: 100% !important;
     }
 }
 

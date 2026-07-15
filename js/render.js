@@ -78,6 +78,8 @@ export function renderDashboard() {
         node.dataset.skillId = id;
         node.style.top = top;
         node.style.left = `${left * 100}%`;
+        node.style.maxWidth = `min(22rem, ${(1 - left) * 100}%)`;
+        node.title = skill.name;
 
         node.innerHTML = `
             <div class="skill-entry-line" style="padding-left: ${indents[0]}px">${entryNumber}  ${escapeHTML(skill.name).toUpperCase()}${titleSuffix}</div>
