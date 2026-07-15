@@ -54,7 +54,8 @@ export function renderActivityList() {
 
         const labelInput = row.querySelector('.activity-label-input');
         labelInput.addEventListener('change', () => renameActivity(act.id, labelInput.value));
-        labelInput.addEventListener('click', () => selectActivity(act.id));
+        labelInput.addEventListener('mousedown', (event) => event.stopPropagation());
+        labelInput.addEventListener('focus', () => selectActivity(act.id, { rerender: false }));
 
         row.querySelector('.delete-activity-btn').addEventListener('click', (event) => {
             deleteActivity(event, act.id);
@@ -68,10 +69,21 @@ export function renderActivityList() {
     syncControlsSidebarHeight();
 }
 
-export function selectActivity(id) {
-    getActiveSkill().activeActivityId = id;
+export function selectActivity(id, { rerender = true } = {}) {
+    const current = getActiveSkill();
+    if (current.activeActivityId === id) return;
+
+    current.activeActivityId = id;
     saveState();
-    renderActivityList();
+
+    if (rerender) {
+        renderActivityList();
+        return;
+    }
+
+    document.querySelectorAll('.activity-row').forEach((activityRow) => {
+        activityRow.classList.toggle('selected', activityRow.id === `act-row-${id}`);
+    });
 }
 
 function renameActivity(id, label) {
