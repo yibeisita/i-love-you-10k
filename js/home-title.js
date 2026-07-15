@@ -4,6 +4,16 @@ import { escapeHTML } from './utils.js';
 let loveIndex = 0;
 let loveTimer = null;
 
+function pickNextLoveIndex() {
+    if (LOVE_PHRASES.length <= 1) return 0;
+
+    let next = loveIndex;
+    while (next === loveIndex) {
+        next = Math.floor(Math.random() * LOVE_PHRASES.length);
+    }
+    return next;
+}
+
 function renderLovePhrase() {
     const el = document.getElementById('home-title-lang');
     if (!el) return;
@@ -19,13 +29,14 @@ function cycleLovePhrase() {
 
     el.classList.add('fading');
     setTimeout(() => {
-        loveIndex = (loveIndex + 1) % LOVE_PHRASES.length;
+        loveIndex = pickNextLoveIndex();
         renderLovePhrase();
         el.classList.remove('fading');
     }, 1500);
 }
 
 export function startLoveCycler() {
+    loveIndex = Math.floor(Math.random() * LOVE_PHRASES.length);
     renderLovePhrase();
     if (loveTimer) clearInterval(loveTimer);
     loveTimer = setInterval(cycleLovePhrase, 10000);

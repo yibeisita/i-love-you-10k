@@ -36,7 +36,13 @@ function createHourCircle(index, skill, isMilestone = false) {
         if (isMilestone) circle.style.color = '#1a1a1a';
     }
 
-    circle.addEventListener('click', () => assignCircleColor(circle, index));
+    circle.addEventListener('click', () => {
+        if (circle.classList.contains('filled')) {
+            clearCircleColor(circle, index);
+        } else {
+            assignCircleColor(circle, index);
+        }
+    });
     circle.addEventListener('contextmenu', (event) => {
         event.preventDefault();
         clearCircleColor(circle, index);

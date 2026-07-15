@@ -1,5 +1,12 @@
 import { saveState, createHundredHourBlock } from './state.js';
 
+function snapshotBlockActivities(skill, block) {
+    const usedActIds = new Set(Object.values(block.loggedHours || {}));
+    block.archivedActivities = skill.activities
+        .filter((act) => usedActIds.has(act.id))
+        .map((act) => ({ id: act.id, label: act.label, colorIndex: act.colorIndex }));
+}
+
 export function getBlockById(skill, blockId) {
     return skill.hundredHourBlocks.find((block) => block.id === blockId) ?? null;
 }
@@ -42,6 +49,7 @@ export function completeBlockAndStartNew(skill) {
     if (!block) return null;
 
     block.loggedHours = { ...skill.loggedHoursData };
+    snapshotBlockActivities(skill, block);
     block.status = 'completed';
 
     skill.loggedHoursData = {};

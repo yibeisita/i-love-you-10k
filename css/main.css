@@ -13,6 +13,7 @@
     --home-title-line-height: 0.95;
     --home-title-lines: 2;
     --home-title-block-height: calc(var(--home-title-size) * var(--home-title-line-height) * var(--home-title-lines));
+    --circle-hover-inset: 8px;
 }
 
 * {
@@ -82,6 +83,7 @@ header {
 
 .view-section {
     display: none;
+    padding-bottom: 1rem;
 }
 
 .view-section.active-view {
@@ -126,7 +128,7 @@ header {
 
 #view-landing.active-view {
     align-items: start;
-    overflow-x: hidden;
+    overflow: visible;
 }
 
 .grid-layout-three-col {
@@ -140,6 +142,9 @@ header {
     gap: 1.4rem 1.1rem;
     max-width: 580px;
     align-content: start;
+    overflow: visible;
+    padding: var(--circle-hover-inset) 0 0 var(--circle-hover-inset);
+    margin: calc(var(--circle-hover-inset) * -1) 0 0 calc(var(--circle-hover-inset) * -1);
 }
 
 .hour-circle {
@@ -182,6 +187,7 @@ header {
 .hour-circle:hover {
     transform: scale(1.18);
     border-color: #a5a49e;
+    z-index: 2;
 }
 
 .hour-circle-readonly {
@@ -774,7 +780,7 @@ body:has(#view-retrospective.active-view) .tracker-header {
     border: none;
     border-bottom: 1.5px solid #1a1a1a;
     background: transparent;
-    padding: 0.3rem 0;
+    padding: 0.75rem 0;
     font-size: 1rem;
     outline: none;
     width: 320px;

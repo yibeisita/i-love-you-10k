@@ -107,9 +107,9 @@ function getTooltip() {
     return tooltipEl;
 }
 
-function showRetrospectiveTooltip(event, hour, actId, skill) {
+function showRetrospectiveTooltip(event, hour, actId, skill, block) {
     const tooltip = getTooltip();
-    const label = actId ? getActivityLabelForSkill(skill, actId) : 'Not logged';
+    const label = actId ? getActivityLabelForSkill(skill, actId, block) : 'Not logged';
 
     tooltip.textContent = actId ? `Hour ${hour} · ${label}` : `Hour ${hour} · ${label}`;
     tooltip.hidden = false;
@@ -123,21 +123,21 @@ function hideRetrospectiveTooltip() {
     getTooltip().hidden = true;
 }
 
-function createReadonlyHourCircle(index, skill, loggedHours, isMilestone = false) {
+function createReadonlyHourCircle(index, skill, loggedHours, block, isMilestone = false) {
     const circle = document.createElement('div');
     circle.className = `hour-circle hour-circle-readonly retrospective-hour${isMilestone ? ' milestone-hundred' : ''}`;
 
     const actId = loggedHours[index];
     if (actId) {
-        circle.style.background = getActivityGradientForSkill(skill, actId);
+        circle.style.background = getActivityGradientForSkill(skill, actId, block);
         circle.classList.add('filled');
-        circle.setAttribute('aria-label', `Hour ${index}: ${getActivityLabelForSkill(skill, actId)}`);
+        circle.setAttribute('aria-label', `Hour ${index}: ${getActivityLabelForSkill(skill, actId, block)}`);
     } else {
         circle.setAttribute('aria-label', `Hour ${index}: not logged`);
     }
 
     circle.dataset.hour = index;
-    circle.addEventListener('mouseenter', (event) => showRetrospectiveTooltip(event, index, actId, skill));
+    circle.addEventListener('mouseenter', (event) => showRetrospectiveTooltip(event, index, actId, skill, block));
     circle.addEventListener('mouseleave', hideRetrospectiveTooltip);
 
     return circle;
@@ -162,7 +162,7 @@ function assembleRetrospectiveGrid(skill, block) {
     const loggedHours = block.loggedHours || {};
 
     for (let i = 1; i <= RETROSPECTIVE_HOUR_COUNT - 1; i++) {
-        const circle = createReadonlyHourCircle(i, skill, loggedHours);
+        const circle = createReadonlyHourCircle(i, skill, loggedHours, block);
         const row = Math.ceil(i / RETROSPECTIVE_STANDARD_COLUMNS);
         const col = ((i - 1) % RETROSPECTIVE_STANDARD_COLUMNS) + 1;
         circle.style.gridRow = String(row);
@@ -170,7 +170,7 @@ function assembleRetrospectiveGrid(skill, block) {
         grid.appendChild(circle);
     }
 
-    const milestone = createReadonlyHourCircle(RETROSPECTIVE_HOUR_COUNT, skill, loggedHours, true);
+    const milestone = createReadonlyHourCircle(RETROSPECTIVE_HOUR_COUNT, skill, loggedHours, block, true);
     milestone.style.gridColumn = String(RETROSPECTIVE_GRID_COLUMNS);
     milestone.style.gridRow = '1 / -1';
     grid.appendChild(milestone);

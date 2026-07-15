@@ -35,4 +35,9 @@ export const LOVE_PHRASES = [
     { line1: "je t'aime", line2: '10 000' },
     { line1: 'أحبك', line2: '١٠٬٠٠٠', rtl: true },
     { line1: '⠊⠇⠕⠧⠑ ⠽⠕⠥', line2: '⠼⠁⠚⠚⠚⠚' },
+    { line1: 'seni seviyorum', line2: '10.000' },
+    { line1: "σ' αγαπώ", line2: '10.000' },
+    { line1: '愛してる', line2: '一万' },
+    { line1: 'ich liebe dich', line2: '10.000' },
+    { line1: 'kocham cię', line2: '10 000' },
 ];

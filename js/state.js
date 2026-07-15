@@ -29,6 +29,7 @@ export function createHundredHourBlock(cycleNumber) {
             win3: '',
         },
         loggedHours: {},
+        archivedActivities: [],
     };
 }
 
@@ -51,25 +52,41 @@ export function createInitialSkillData(name) {
     };
 }
 
+function snapshotBlockActivities(skill, block) {
+    const usedActIds = new Set(Object.values(block.loggedHours || {}));
+    block.archivedActivities = skill.activities
+        .filter((act) => usedActIds.has(act.id))
+        .map((act) => ({ id: act.id, label: act.label, colorIndex: act.colorIndex }));
+}
+
+function backfillArchivedActivities(skill) {
+    skill.hundredHourBlocks.forEach((block) => {
+        if (block.status !== 'completed' || block.archivedActivities?.length) return;
+
+        snapshotBlockActivities(skill, block);
+    });
+}
+
 function migrateSkill(skill) {
-    if (skill.hundredHourBlocks) return skill;
+    if (!skill.hundredHourBlocks) {
+        const block = createHundredHourBlock(1);
+        block.loggedHours = { ...(skill.loggedHoursData || {}) };
 
-    const block = createHundredHourBlock(1);
-    block.loggedHours = { ...(skill.loggedHoursData || {}) };
+        if (Object.keys(skill.loggedHoursData || {}).length >= 100) {
+            block.status = 'awaiting-reflection';
+        }
 
-    if (Object.keys(skill.loggedHoursData || {}).length >= 100) {
-        block.status = 'awaiting-reflection';
+        if (skill.reflections) {
+            block.reflect.lessons = skill.reflections.breakthrough || '';
+            block.reflect.growth = skill.reflections.pivot || '';
+        }
+
+        skill.currentBlockId = block.id;
+        skill.hundredHourBlocks = [block];
+        delete skill.reflections;
     }
 
-    if (skill.reflections) {
-        block.reflect.lessons = skill.reflections.breakthrough || '';
-        block.reflect.growth = skill.reflections.pivot || '';
-    }
-
-    skill.currentBlockId = block.id;
-    skill.hundredHourBlocks = [block];
-    delete skill.reflections;
-
+    backfillArchivedActivities(skill);
     return skill;
 }
 
