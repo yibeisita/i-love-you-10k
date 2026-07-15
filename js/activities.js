@@ -4,6 +4,7 @@ import { escapeHTML } from './utils.js';
 import { renderDashboard } from './render.js';
 import { assembleTrackerGrid, recalculateCounters } from './tracker.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
+import { t, getColorName } from './i18n.js';
 
 let pickerTargetId = null;
 
@@ -16,7 +17,7 @@ export function buildSwatchGrid() {
         swatch.type = 'button';
         swatch.className = 'color-swatch';
         swatch.style.background = orb.gradient;
-        swatch.title = orb.name;
+        swatch.title = getColorName(index);
         swatch.addEventListener('click', () => assignColorToActivity(index));
         grid.appendChild(swatch);
     });
@@ -42,7 +43,7 @@ export function renderActivityList() {
                 <input type="text" class="activity-label-input" value="${escapeHTML(act.label)}">
             </div>
             <div class="activity-row-right">
-                <button type="button" class="delete-activity-btn" title="Remove">&times;</button>
+                <button type="button" class="delete-activity-btn" title="${t('removeActivity')}">&times;</button>
                 <div class="radio-indicator"></div>
             </div>
         `;
@@ -110,7 +111,7 @@ export function addActivity() {
 
     current.activities.push({
         id,
-        label: 'New activity',
+        label: t('newActivity'),
         colorIndex: nextColor >= 0 ? nextColor : 0,
     });
     current.activeActivityId = id;

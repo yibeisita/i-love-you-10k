@@ -34,7 +34,7 @@
 
             <div class="dashboard-bottom-bar">
                 <div class="skill-add-container">
-                    <label for="skill-input" class="visually-hidden">Add a new skill</label>
+                    <label for="skill-input" class="visually-hidden" data-i18n="addSkillLabel">Add a new skill</label>
                     <input
                         type="text"
                         class="skill-add-input"
@@ -58,40 +58,40 @@
 
             <aside class="controls-sidebar">
                 <div class="sidebar-panel sidebar-activities-panel">
-                    <div class="sidebar-section-title">Activities</div>
+                    <div class="sidebar-section-title" data-i18n="activities">Activities</div>
                     <div class="activity-select-list sidebar-scroll" id="activity-list"></div>
-                    <button type="button" class="add-activity-btn" id="add-activity-btn">+ Add activity</button>
+                    <button type="button" class="add-activity-btn" id="add-activity-btn" data-i18n="addActivity">+ Add activity</button>
                 </div>
 
                 <div class="sidebar-panel sidebar-reflections-panel">
-                    <div class="sidebar-section-title">Reflections</div>
+                    <div class="sidebar-section-title" data-i18n="reflections">Reflections</div>
                     <div class="reflections-list sidebar-scroll">
                         <button type="button" class="reflection-item" data-view="setup">
                             <div class="reflection-number">01</div>
                             <div class="reflection-content">
-                                <div class="reflection-title">Where The Work Begins</div>
-                                <div class="reflection-desc">Purpose, identity, starting point &amp; non-negotiables</div>
+                                <div class="reflection-title" data-i18n="setupTitle">Where The Work Begins</div>
+                                <div class="reflection-desc" data-i18n="setupDesc">Purpose, identity, starting point &amp; non-negotiables</div>
                             </div>
                         </button>
                         <div class="reflection-group">
                             <button type="button" class="reflection-item" id="reflection-current-btn" data-view="reflection">
                                 <div class="reflection-number">02</div>
                                 <div class="reflection-content">
-                                    <div class="reflection-title">100-Hour Reflections</div>
+                                    <div class="reflection-title" data-i18n="reflection100Title">100-Hour Reflections</div>
                                     <div class="reflection-desc" id="sidebar-reflection-desc">Starting &amp; reflecting on block 1</div>
                                 </div>
                             </button>
-                            <nav class="reflection-block-nav" id="reflection-block-nav" aria-label="Completed 100-hour blocks"></nav>
+                            <nav class="reflection-block-nav" id="reflection-block-nav" data-i18n-aria="completedBlocksNavAria" aria-label="Completed 100-hour blocks"></nav>
                         </div>
                         <div class="reflection-group">
                             <button type="button" class="reflection-item" id="retrospective-main-btn">
                                 <div class="reflection-number">03</div>
                                 <div class="reflection-content">
-                                    <div class="reflection-title">Retrospective</div>
+                                    <div class="reflection-title" data-i18n="retrospectiveTitle">Retrospective</div>
                                     <div class="reflection-desc" id="sidebar-retrospective-desc">No completed logs yet</div>
                                 </div>
                             </button>
-                            <nav class="reflection-block-nav" id="retrospective-block-nav" aria-label="Archived track logs"></nav>
+                            <nav class="reflection-block-nav" id="retrospective-block-nav" data-i18n-aria="archivedLogsAria" aria-label="Archived track logs"></nav>
                         </div>
                     </div>
                 </div>
@@ -99,111 +99,111 @@
         </section>
 
         <section id="view-retrospective" class="view-section prompts-container-view" aria-label="Retrospective track log">
-            <p class="retrospective-empty" id="retrospective-empty" hidden>Complete a 100-hour block to archive your first track log.</p>
+            <p class="retrospective-empty" id="retrospective-empty" hidden data-i18n="retrospectiveEmpty">Complete a 100-hour block to archive your first track log.</p>
             <div class="retrospective-grid" id="retrospective-grid"></div>
         </section>
 
         <section id="view-setup" class="view-section prompts-container-view" aria-label="Setup prompts">
-            <h2 class="prompts-heading">Where The Work Begins</h2>
+            <h2 class="prompts-heading" data-i18n="setupTitle">Where The Work Begins</h2>
             <div class="minimal-prompt-card">
-                <label for="setup-purpose">Purpose</label>
-                <span class="desc">Why this journey matters.</span>
-                <textarea id="setup-purpose" data-prompt placeholder="write here"></textarea>
+                <label for="setup-purpose" data-i18n="setupPurpose">Purpose</label>
+                <span class="desc" data-i18n="setupPurposeDesc">Why this journey matters.</span>
+                <textarea id="setup-purpose" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
             <div class="minimal-prompt-card">
-                <label for="setup-identity">Identity</label>
-                <span class="desc">Who I hope to become through this practice.</span>
-                <textarea id="setup-identity" data-prompt placeholder="write here"></textarea>
+                <label for="setup-identity" data-i18n="setupIdentity">Identity</label>
+                <span class="desc" data-i18n="setupIdentityDesc">Who I hope to become through this practice.</span>
+                <textarea id="setup-identity" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
             <div class="minimal-prompt-card">
-                <label for="setup-starting">Starting Point</label>
-                <span class="desc">My current level, strengths, and blind spots as I begin.</span>
-                <textarea id="setup-starting" data-prompt placeholder="write here"></textarea>
+                <label for="setup-starting" data-i18n="setupStarting">Starting Point</label>
+                <span class="desc" data-i18n="setupStartingDesc">My current level, strengths, and blind spots as I begin.</span>
+                <textarea id="setup-starting" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
             <div class="minimal-prompt-card">
-                <label for="setup-endurance">Endurance</label>
-                <span class="desc">The discomfort, boredom, or challenges I'm prepared to push through.</span>
-                <textarea id="setup-endurance" data-prompt placeholder="write here"></textarea>
+                <label for="setup-endurance" data-i18n="setupEndurance">Endurance</label>
+                <span class="desc" data-i18n="setupEnduranceDesc">The discomfort, boredom, or challenges I'm prepared to push through.</span>
+                <textarea id="setup-endurance" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
             <div class="minimal-prompt-card">
-                <label for="setup-negotiables">Non-Negotiables</label>
-                <span class="desc">The values, boundaries, or parts of myself I refuse to compromise.</span>
-                <textarea id="setup-negotiables" data-prompt placeholder="write here"></textarea>
+                <label for="setup-negotiables" data-i18n="setupNegotiables">Non-Negotiables</label>
+                <span class="desc" data-i18n="setupNegotiablesDesc">The values, boundaries, or parts of myself I refuse to compromise.</span>
+                <textarea id="setup-negotiables" data-prompt data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
         </section>
 
         <section id="view-reflection" class="view-section prompts-container-view" aria-label="100-hour reflections">
             <p class="reflection-cycle-label" id="reflection-cycle-label">Block 1</p>
 
-            <h2 class="prompts-heading">Starting My 100 Hours...</h2>
+            <h2 class="prompts-heading" data-i18n="starting100Hours">Starting My 100 Hours...</h2>
 
             <div class="minimal-prompt-card prompt-date-row">
-                <label for="block-start-date">Start Date</label>
-                <input type="text" class="prompt-inline-input" id="block-start-date" data-block-field placeholder="__/__/____" autocomplete="off" />
+                <label for="block-start-date" data-i18n="startDate">Start Date</label>
+                <input type="text" class="prompt-inline-input" id="block-start-date" data-block-field data-i18n-placeholder="datePlaceholder" placeholder="__/__/____" autocomplete="off" />
             </div>
 
             <div class="minimal-prompt-card">
-                <label for="block-guidelines">1. Guidelines I'll Follow</label>
-                <textarea id="block-guidelines" data-block-field placeholder="write here"></textarea>
+                <label for="block-guidelines" data-i18n="blockGuidelines">1. Guidelines I'll Follow</label>
+                <textarea id="block-guidelines" data-block-field data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
 
             <div class="minimal-prompt-card">
-                <label for="block-achieve">2. What I Want to Achieve</label>
-                <textarea id="block-achieve" data-block-field placeholder="write here"></textarea>
+                <label for="block-achieve" data-i18n="blockAchieve">2. What I Want to Achieve</label>
+                <textarea id="block-achieve" data-block-field data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
 
             <div class="minimal-prompt-card">
-                <label for="block-habits">3. Habits or Worries I'm Leaving Behind</label>
-                <textarea id="block-habits" data-block-field placeholder="write here"></textarea>
+                <label for="block-habits" data-i18n="blockHabits">3. Habits or Worries I'm Leaving Behind</label>
+                <textarea id="block-habits" data-block-field data-i18n-placeholder="writeHere" placeholder="write here"></textarea>
             </div>
 
             <hr class="prompt-divider" />
 
             <div id="reflecting-section" class="reflecting-section locked">
-                <h2 class="prompts-heading">Reflecting on My 100 Hours...</h2>
-                <p class="reflecting-locked-note">Complete 100 hours in this block to unlock this section.</p>
+                <h2 class="prompts-heading" data-i18n="reflecting100Hours">Reflecting on My 100 Hours...</h2>
+                <p class="reflecting-locked-note" data-i18n="reflectingLockedNote">Complete 100 hours in this block to unlock this section.</p>
 
                 <div class="minimal-prompt-card prompt-date-row">
-                    <label for="block-finish-date">Finish Date</label>
-                    <input type="text" class="prompt-inline-input" id="block-finish-date" data-block-field placeholder="__/__/____" autocomplete="off" disabled />
+                    <label for="block-finish-date" data-i18n="finishDate">Finish Date</label>
+                    <input type="text" class="prompt-inline-input" id="block-finish-date" data-block-field data-i18n-placeholder="datePlaceholder" placeholder="__/__/____" autocomplete="off" disabled />
                 </div>
 
                 <div class="minimal-prompt-card">
-                    <label for="block-best-moments">1. Best Moments</label>
-                    <textarea id="block-best-moments" data-block-field placeholder="write here" disabled></textarea>
+                    <label for="block-best-moments" data-i18n="blockBestMoments">1. Best Moments</label>
+                    <textarea id="block-best-moments" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" disabled></textarea>
                 </div>
                 <div class="minimal-prompt-card">
-                    <label for="block-appreciate">2. Things I Appreciate</label>
-                    <textarea id="block-appreciate" data-block-field placeholder="write here" disabled></textarea>
+                    <label for="block-appreciate" data-i18n="blockAppreciate">2. Things I Appreciate</label>
+                    <textarea id="block-appreciate" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" disabled></textarea>
                 </div>
                 <div class="minimal-prompt-card">
-                    <label for="block-lessons">3.Lessons I Took Away</label>
-                    <textarea id="block-lessons" data-block-field placeholder="write here" disabled></textarea>
+                    <label for="block-lessons" data-i18n="blockLessons">3. Lessons I Took Away</label>
+                    <textarea id="block-lessons" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" disabled></textarea>
                 </div>
                 <div class="minimal-prompt-card">
-                    <label for="block-expectations">4. Expectations I Fulfilled</label>
-                    <textarea id="block-expectations" data-block-field placeholder="write here" disabled></textarea>
+                    <label for="block-expectations" data-i18n="blockExpectations">4. Expectations I Fulfilled</label>
+                    <textarea id="block-expectations" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" disabled></textarea>
                 </div>
                 <div class="minimal-prompt-card">
-                    <label for="block-growth">5. Areas for Growth</label>
-                    <textarea id="block-growth" data-block-field placeholder="write here" disabled></textarea>
+                    <label for="block-growth" data-i18n="blockGrowth">5. Areas for Growth</label>
+                    <textarea id="block-growth" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" disabled></textarea>
                 </div>
                 <div class="minimal-prompt-card">
-                    <label for="block-rating">6. Overall Rating</label>
-                    <textarea id="block-rating" data-block-field placeholder="write here" disabled></textarea>
+                    <label for="block-rating" data-i18n="blockRating">6. Overall Rating</label>
+                    <textarea id="block-rating" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" disabled></textarea>
                 </div>
 
                 <div class="minimal-prompt-card">
-                    <label>7. My Top 3 Wins</label>
+                    <label data-i18n="blockTop3Wins">7. My Top 3 Wins</label>
                     <ol class="prompt-win-list">
-                        <li><input type="text" class="prompt-inline-input" id="block-win-1" data-block-field placeholder="write here" autocomplete="off" disabled /></li>
-                        <li><input type="text" class="prompt-inline-input" id="block-win-2" data-block-field placeholder="write here" autocomplete="off" disabled /></li>
-                        <li><input type="text" class="prompt-inline-input" id="block-win-3" data-block-field placeholder="write here" autocomplete="off" disabled /></li>
+                        <li><input type="text" class="prompt-inline-input" id="block-win-1" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" autocomplete="off" disabled /></li>
+                        <li><input type="text" class="prompt-inline-input" id="block-win-2" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" autocomplete="off" disabled /></li>
+                        <li><input type="text" class="prompt-inline-input" id="block-win-3" data-block-field data-i18n-placeholder="writeHere" placeholder="write here" autocomplete="off" disabled /></li>
                     </ol>
                 </div>
             </div>
 
-            <button type="button" class="begin-next-block-btn" id="complete-reflection-btn" hidden>Begin next 100 hours</button>
+            <button type="button" class="begin-next-block-btn" id="complete-reflection-btn" hidden data-i18n="beginNextBlock">Begin next 100 hours</button>
         </section>
 
         <section id="view-faq" class="view-section prompts-container-view" aria-label="FAQ">
@@ -237,8 +237,8 @@
         </section>
     </main>
 
-    <div id="color-picker-popup" class="color-picker-popup" role="dialog" aria-label="Choose colour">
-        <div class="color-picker-title">Choose colour</div>
+    <div id="color-picker-popup" class="color-picker-popup" role="dialog" data-i18n-aria="chooseColour" aria-label="Choose colour">
+        <div class="color-picker-title" data-i18n="chooseColour">Choose colour</div>
         <div class="color-swatch-grid" id="color-swatch-grid"></div>
     </div>
 

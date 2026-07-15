@@ -2,10 +2,9 @@ import { loadState } from './state.js';
 import { startLiveClock } from './clock.js';
 import { setView, handleHeaderBack, initHomeView } from './views.js';
 import { addSkillFromInput, renameActiveSkill, bindSkillDashboardEvents } from './skills.js';
-import { renderDashboard } from './render.js';
-import { buildSwatchGrid, addActivity, closeColorPicker } from './activities.js';
+import { addActivity, closeColorPicker } from './activities.js';
 import { bindControlsSidebarHeightSync } from './sidebar-layout.js';
-import { loadActiveSkillIntoUI } from './ui.js';
+import { loadActiveSkillIntoUI, refreshDynamicUI } from './ui.js';
 import { saveCurrentPrompts, openCurrentReflection } from './prompts.js';
 import { openLatestRetrospective } from './retrospective.js';
 import { startLoveCycler } from './home-title.js';
@@ -18,11 +17,9 @@ import { updateHeaderBackLabel } from './views.js';
 function initApp() {
     loadPreferences();
     loadState();
-    buildSwatchGrid();
-    renderDashboard();
-    loadActiveSkillIntoUI();
     startLiveClock();
     applyTranslations();
+    refreshDynamicUI();
     updateHeaderBackLabel();
 }
 

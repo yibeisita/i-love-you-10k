@@ -2,6 +2,7 @@ import { getActiveSkill, saveState } from './state.js';
 import { renderDashboard } from './render.js';
 import { setView } from './views.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
+import { t, tCount } from './i18n.js';
 import {
     getCurrentBlock,
     getBlockById,
@@ -77,11 +78,11 @@ function updateReflectionPageState(skill, block) {
     const viewingCurrent = isViewingCurrentBlock(skill, block);
 
     if (cycleLabel) {
-        cycleLabel.textContent = `Block ${block.cycleNumber}`;
+        cycleLabel.textContent = t('blockLabel', { n: block.cycleNumber });
     }
 
     if (sidebarReflection && currentBlock) {
-        sidebarReflection.textContent = `Starting & reflecting on block ${currentBlock.cycleNumber}`;
+        sidebarReflection.textContent = t('sidebarReflectionDesc', { n: currentBlock.cycleNumber });
     }
 
     const unlocked = isReflectingSectionUnlocked(block);
@@ -120,7 +121,7 @@ export function renderReflectionBlockNav(skill) {
         btn.type = 'button';
         btn.className = 'reflection-block-nav-btn';
         btn.dataset.blockId = block.id;
-        btn.textContent = `Block ${block.cycleNumber}`;
+        btn.textContent = t('blockLabel', { n: block.cycleNumber });
         btn.addEventListener('click', () => openReflectionBlock(block.id));
         nav.appendChild(btn);
     });

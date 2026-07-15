@@ -1,4 +1,5 @@
 import { STORAGE_KEY } from './constants.js';
+import { getDefaultActivityLabels } from './i18n.js';
 
 export const appState = {
     activeSkillId: null,
@@ -35,15 +36,16 @@ export function createHundredHourBlock(cycleNumber) {
 
 export function createInitialSkillData(name) {
     const block = createHundredHourBlock(1);
+    const [practice, theory, freeFlow] = getDefaultActivityLabels();
 
     return {
         name,
         actIdCounter: 5,
         activeActivityId: 'act0',
         activities: [
-            { id: 'act0', label: 'Practice/Drills', colorIndex: 0 },
-            { id: 'act1', label: 'Theory/Study', colorIndex: 4 },
-            { id: 'act2', label: 'Free Flow/Form', colorIndex: 11 },
+            { id: 'act0', label: practice, colorIndex: 0 },
+            { id: 'act1', label: theory, colorIndex: 4 },
+            { id: 'act2', label: freeFlow, colorIndex: 11 },
         ],
         loggedHoursData: {},
         prompts: { purpose: '', identity: '', starting: '', endurance: '', negotiables: '' },

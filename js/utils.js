@@ -9,8 +9,8 @@ export function seededRandom(seed) {
     return x - Math.floor(x);
 }
 
-export function formatLocalDate() {
-    return new Date().toLocaleDateString(undefined, {
+export function formatLocalDate(locale = undefined) {
+    return new Date().toLocaleDateString(locale, {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -18,8 +18,8 @@ export function formatLocalDate() {
     });
 }
 
-export function formatLocalTime() {
-    return new Date().toLocaleTimeString(undefined, {
+export function formatLocalTime(locale = undefined) {
+    return new Date().toLocaleTimeString(locale, {
         hour: 'numeric',
         minute: '2-digit',
         second: '2-digit',

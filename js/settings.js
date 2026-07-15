@@ -1,7 +1,7 @@
 import { appState, saveState, migrateSkill } from './state.js';
 import { getPreferences, setLanguage, t, applyTranslations } from './i18n.js';
 import { renderDashboard } from './render.js';
-import { loadActiveSkillIntoUI } from './ui.js';
+import { loadActiveSkillIntoUI, refreshDynamicUI } from './ui.js';
 import { getCurrentView, setView, updateHeaderBackLabel } from './views.js';
 
 const EXPORT_VERSION = 1;
@@ -62,11 +62,11 @@ export function importAllData(file) {
 
             if (parsed.preferences?.language) {
                 setLanguage(parsed.preferences.language);
+            } else {
+                applyTranslations();
             }
 
-            renderDashboard();
-            loadActiveSkillIntoUI();
-            applyTranslations();
+            refreshDynamicUI();
             updateHeaderBackLabel();
 
             if (getCurrentView() !== 'home') {
@@ -99,7 +99,7 @@ export function initSettings() {
         btn.addEventListener('click', () => {
             const changed = setLanguage(btn.dataset.lang);
             if (changed) {
-                renderDashboard();
+                refreshDynamicUI();
                 updateHeaderBackLabel();
             }
         });

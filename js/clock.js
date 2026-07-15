@@ -1,14 +1,16 @@
 import { formatLocalDate, formatLocalTime } from './utils.js';
+import { getLocale } from './i18n.js';
 
 let clockTimer = null;
 
-function updateClock() {
+export function updateClock() {
     const dateEl = document.getElementById('live-date');
     const timeEl = document.getElementById('live-time');
     if (!dateEl || !timeEl) return;
 
-    dateEl.textContent = formatLocalDate();
-    timeEl.textContent = formatLocalTime();
+    const locale = getLocale();
+    dateEl.textContent = formatLocalDate(locale);
+    timeEl.textContent = formatLocalTime(locale);
 }
 
 export function startLiveClock() {

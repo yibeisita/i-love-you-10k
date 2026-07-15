@@ -3,6 +3,7 @@ import { getCompletedBlocks } from './hundred-hour.js';
 import { getActivityGradientForSkill, getActivityLabelForSkill } from './colors.js';
 import { setView } from './views.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
+import { t, tCount } from './i18n.js';
 import {
     RETROSPECTIVE_GRID_COLUMNS,
     RETROSPECTIVE_HOUR_COUNT,
@@ -87,6 +88,10 @@ function getRetrospectiveBlocks(skill) {
     return getCompletedBlocks(skill);
 }
 
+function formatRetrospectiveDesc(completedCount) {
+    return completedCount > 0 ? tCount('completedBlocksArchived', completedCount) : t('noCompletedLogs');
+}
+
 function getViewingRetrospectiveBlock(skill) {
     if (viewingRetrospectiveBlockId) {
         return skill.hundredHourBlocks.find((block) => block.id === viewingRetrospectiveBlockId) ?? null;
@@ -109,9 +114,9 @@ function getTooltip() {
 
 function showRetrospectiveTooltip(event, hour, actId, skill, block) {
     const tooltip = getTooltip();
-    const label = actId ? getActivityLabelForSkill(skill, actId, block) : 'Not logged';
+    const label = actId ? getActivityLabelForSkill(skill, actId, block) : t('hourNotLogged');
 
-    tooltip.textContent = actId ? `Hour ${hour} · ${label}` : `Hour ${hour} · ${label}`;
+    tooltip.textContent = t('hourTooltip', { hour, label });
     tooltip.hidden = false;
 
     const rect = event.currentTarget.getBoundingClientRect();
@@ -131,9 +136,9 @@ function createReadonlyHourCircle(index, skill, loggedHours, block, isMilestone 
     if (actId) {
         circle.style.background = getActivityGradientForSkill(skill, actId, block);
         circle.classList.add('filled');
-        circle.setAttribute('aria-label', `Hour ${index}: ${getActivityLabelForSkill(skill, actId, block)}`);
+        circle.setAttribute('aria-label', t('hourAriaLogged', { hour: index, label: getActivityLabelForSkill(skill, actId, block) }));
     } else {
-        circle.setAttribute('aria-label', `Hour ${index}: not logged`);
+        circle.setAttribute('aria-label', t('hourAriaNotLogged', { hour: index }));
     }
 
     circle.dataset.hour = index;
@@ -195,11 +200,7 @@ function updateRetrospectiveNavState(skill, block) {
 
     const desc = document.getElementById('sidebar-retrospective-desc');
     if (desc) {
-        const completedCount = completed.length;
-        desc.textContent =
-            completedCount > 0
-                ? `${completedCount} completed block${completedCount === 1 ? '' : 's'} archived`
-                : 'No completed logs yet';
+        desc.textContent = formatRetrospectiveDesc(completed.length);
     }
 }
 
@@ -212,10 +213,7 @@ export function renderRetrospectiveBlockNav(skill) {
     const completed = getRetrospectiveBlocks(skill);
     const desc = document.getElementById('sidebar-retrospective-desc');
     if (desc) {
-        desc.textContent =
-            completed.length > 0
-                ? `${completed.length} completed block${completed.length === 1 ? '' : 's'} archived`
-                : 'No completed logs yet';
+        desc.textContent = formatRetrospectiveDesc(completed.length);
     }
 
     completed.forEach((block) => {
@@ -223,7 +221,7 @@ export function renderRetrospectiveBlockNav(skill) {
         btn.type = 'button';
         btn.className = 'reflection-block-nav-btn retrospective-block-nav-btn';
         btn.dataset.blockId = block.id;
-        btn.textContent = `Block ${block.cycleNumber}`;
+        btn.textContent = t('blockLabel', { n: block.cycleNumber });
         btn.addEventListener('click', () => openRetrospectiveBlock(block.id));
         nav.appendChild(btn);
     });

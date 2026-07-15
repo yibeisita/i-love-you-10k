@@ -1,7 +1,7 @@
 import { appState } from './state.js';
 import { escapeHTML, seededRandom } from './utils.js';
 import { getTotalHours } from './hundred-hour.js';
-import { t } from './i18n.js';
+import { t, getLocale } from './i18n.js';
 
 const ENTRY_ROW_HEIGHT_REM = 5.5;
 const TITLE_TOP_OFFSET = 'calc(var(--home-title-block-height) + 2.5rem)';
@@ -33,7 +33,7 @@ function formatSkillStartDate(skill) {
     const parsed = new Date(raw);
     if (!Number.isNaN(parsed.getTime())) {
         const day = String(parsed.getDate()).padStart(2, '0');
-        const month = parsed.toLocaleString('en', { month: 'long' }).toLowerCase();
+        const month = parsed.toLocaleString(getLocale(), { month: 'long' }).toLowerCase();
         return `${day}-${month}-${parsed.getFullYear()}`;
     }
 
