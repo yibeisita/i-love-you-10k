@@ -21,6 +21,10 @@ export function getCurrentBlock(skill) {
     return skill.hundredHourBlocks.find((block) => block.id === skill.currentBlockId) ?? null;
 }
 
+export function getBlockMilestoneHours(block) {
+    return (block?.cycleNumber ?? 1) * 100;
+}
+
 export function getCurrentBlockHours(skill) {
     return Object.keys(skill.loggedHoursData || {}).length;
 }

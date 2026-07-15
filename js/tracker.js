@@ -1,7 +1,7 @@
 import { getActiveSkill, saveState } from './state.js';
 import { getActivityGradient } from './colors.js';
 import { renderDashboard } from './render.js';
-import { getTotalHours, checkHundredHourMilestone } from './hundred-hour.js';
+import { getTotalHours, checkHundredHourMilestone, getCurrentBlock, getBlockMilestoneHours } from './hundred-hour.js';
 import { openCurrentReflection, scrollToReflectingSection } from './prompts.js';
 import { playPunchSound } from './sound.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
@@ -26,14 +26,16 @@ function createHourCircle(index, skill, isMilestone = false) {
     circle.className = `hour-circle${isMilestone ? ' milestone-hundred' : ''}`;
 
     if (isMilestone) {
-        circle.innerText = '100h';
+        const label = document.createElement('span');
+        label.className = 'milestone-label';
+        label.textContent = String(getBlockMilestoneHours(getCurrentBlock(skill)));
+        circle.appendChild(label);
     }
 
     if (skill.loggedHoursData[index]) {
         circle.style.background = getActivityGradient(skill.loggedHoursData[index]);
         circle.dataset.actId = skill.loggedHoursData[index];
         circle.classList.add('filled');
-        if (isMilestone) circle.style.color = '#1a1a1a';
     }
 
     circle.addEventListener('click', () => {
@@ -56,7 +58,6 @@ function assignCircleColor(element, index) {
     element.style.background = getActivityGradient(current.activeActivityId);
     element.dataset.actId = current.activeActivityId;
     element.classList.add('filled');
-    if (index === 100) element.style.color = '#1a1a1a';
 
     current.loggedHoursData[index] = current.activeActivityId;
     saveState();
@@ -75,7 +76,6 @@ function clearCircleColor(element, index) {
     element.style.background = '';
     element.dataset.actId = '';
     element.classList.remove('filled');
-    if (index === 100) element.style.color = '';
 
     delete current.loggedHoursData[index];
     saveState();

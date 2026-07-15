@@ -1,5 +1,5 @@
 import { getActiveSkill } from './state.js';
-import { getCompletedBlocks } from './hundred-hour.js';
+import { getCompletedBlocks, getBlockMilestoneHours } from './hundred-hour.js';
 import { getActivityGradientForSkill, getActivityLabelForSkill } from './colors.js';
 import { setView } from './views.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
@@ -131,6 +131,13 @@ function hideRetrospectiveTooltip() {
 function createReadonlyHourCircle(index, skill, loggedHours, block, isMilestone = false) {
     const circle = document.createElement('div');
     circle.className = `hour-circle hour-circle-readonly retrospective-hour${isMilestone ? ' milestone-hundred' : ''}`;
+
+    if (isMilestone) {
+        const label = document.createElement('span');
+        label.className = 'milestone-label';
+        label.textContent = String(getBlockMilestoneHours(block));
+        circle.appendChild(label);
+    }
 
     const actId = loggedHours[index];
     if (actId) {

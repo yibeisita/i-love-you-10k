@@ -222,6 +222,17 @@ header {
     border: 1px dashed #c4c3bd;
 }
 
+.milestone-label {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.hour-circle.milestone-hundred.filled .milestone-label {
+    color: #fff;
+}
+
 .controls-sidebar {
     display: flex;
     flex-direction: column;
@@ -559,7 +570,9 @@ body:has(#view-retrospective.active-view) .tracker-header {
 }
 
 .retrospective-grid .retrospective-hour.milestone-hundred {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: var(--retro-milestone-size);
     height: var(--retro-milestone-size);
     max-width: 100%;
@@ -570,9 +583,9 @@ body:has(#view-retrospective.active-view) .tracker-header {
     margin: 0;
     margin-inline-start: var(--retro-milestone-gap);
     border-style: solid;
-    font-size: inherit;
-    font-weight: inherit;
-    color: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
 }
 
 .retrospective-hour.filled:hover {
