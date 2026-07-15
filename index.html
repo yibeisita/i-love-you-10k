@@ -52,15 +52,15 @@
             <div class="tracker-grid-container" id="hour-grid-target"></div>
 
             <aside class="controls-sidebar">
-                <div>
+                <div class="sidebar-panel sidebar-activities-panel">
                     <div class="sidebar-section-title">Activities</div>
-                    <div class="activity-select-list" id="activity-list"></div>
+                    <div class="activity-select-list sidebar-scroll" id="activity-list"></div>
                     <button type="button" class="add-activity-btn" id="add-activity-btn">+ Add activity</button>
                 </div>
 
-                <div>
+                <div class="sidebar-panel sidebar-reflections-panel">
                     <div class="sidebar-section-title">Reflections</div>
-                    <div class="reflections-list">
+                    <div class="reflections-list sidebar-scroll">
                         <button type="button" class="reflection-item" data-view="setup">
                             <div class="reflection-number">01</div>
                             <div class="reflection-content">
@@ -94,7 +94,6 @@
         </section>
 
         <section id="view-retrospective" class="view-section prompts-container-view" aria-label="Retrospective track log">
-            <p class="reflection-cycle-label" id="retrospective-block-label"></p>
             <p class="retrospective-empty" id="retrospective-empty" hidden>Complete a 100-hour block to archive your first track log.</p>
             <div class="retrospective-grid" id="retrospective-grid"></div>
         </section>

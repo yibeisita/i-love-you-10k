@@ -6,7 +6,7 @@
     --border-color: #e6e5e0;
     --gradient-empty: radial-gradient(circle, #ffffff 0%, #f7f7f5 100%);
     --view-fade-duration: 5s;
-    --title-reveal-duration: 8s;
+    --title-reveal-duration: 14s;
     --page-padding-y: 4rem;
     --page-padding-x: 2rem;
 }
@@ -73,6 +73,7 @@ header {
     font-size: 0.85rem;
     color: var(--text-muted);
     margin-top: 0.35rem;
+    margin-bottom: 0.5rem;
 }
 
 .view-section {
@@ -114,9 +115,14 @@ header {
     #view-setup .prompts-heading,
     #view-reflection .prompts-heading,
     #view-retrospective .prompts-heading {
-        clip-path: none;
         opacity: 1;
+        transform: none;
     }
+}
+
+#view-landing.active-view {
+    align-items: start;
+    overflow-x: hidden;
 }
 
 .grid-layout-three-col {
@@ -206,6 +212,47 @@ header {
     display: flex;
     flex-direction: column;
     gap: 3rem;
+    align-self: start;
+    width: 100%;
+    min-width: 0;
+    max-height: var(--tracker-grid-height, none);
+    overflow: hidden;
+}
+
+.sidebar-panel {
+    min-width: 0;
+    overflow-x: hidden;
+}
+
+.sidebar-activities-panel {
+    flex: 0 0 auto;
+}
+
+.sidebar-reflections-panel {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-scroll {
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.activity-select-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-height: var(--activity-list-max-height, none);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .sidebar-section-title {
@@ -215,12 +262,7 @@ header {
     color: var(--text-muted);
     margin-bottom: 1.2rem;
     font-weight: 600;
-}
-
-.activity-select-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    flex-shrink: 0;
 }
 
 .color-preview-dot {
@@ -239,7 +281,8 @@ header {
     font-size: 1rem;
     color: var(--text-main);
     outline: none;
-    width: 160px;
+    width: 100%;
+    min-width: 0;
     cursor: pointer;
 }
 
@@ -275,6 +318,35 @@ header {
     max-width: none;
 }
 
+#view-retrospective.active-view {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+}
+
+body:has(#view-retrospective.active-view) {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100dvh;
+    padding-top: 1rem;
+    padding-bottom: 0.75rem;
+}
+
+body:has(#view-retrospective.active-view) main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body:has(#view-retrospective.active-view) .tracker-header {
+    margin-bottom: 0.65rem;
+    flex-shrink: 0;
+}
+
 .prompts-heading {
     font-weight: 400;
     margin-bottom: 2.5rem;
@@ -285,32 +357,32 @@ header {
 #view-setup .prompts-heading,
 #view-reflection .prompts-heading,
 #view-retrospective .prompts-heading {
-    clip-path: inset(0 100% 0 0);
     opacity: 0;
+    transform: translateY(10px);
 }
 
 #view-setup .prompts-heading.title-reveal,
 #view-reflection .prompts-heading.title-reveal,
 #view-retrospective .prompts-heading.title-reveal {
-    animation: titleTextReveal var(--title-reveal-duration) cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    animation: titleTextReveal var(--title-reveal-duration) ease-in-out infinite;
 }
 
 @keyframes titleTextReveal {
     0% {
-        clip-path: inset(0 100% 0 0);
         opacity: 0;
+        transform: translateY(10px);
     }
-    35% {
-        clip-path: inset(0 0 0 0);
+    30% {
         opacity: 1;
+        transform: translateY(0);
     }
-    55% {
-        clip-path: inset(0 0 0 0);
+    60% {
         opacity: 1;
+        transform: translateY(0);
     }
     100% {
-        clip-path: inset(0 100% 0 0);
         opacity: 0;
+        transform: translateY(-6px);
     }
 }
 
@@ -436,32 +508,67 @@ header {
 }
 
 .retrospective-grid {
+    --retro-cell-size: auto;
+    --retro-milestone-size: auto;
+    --retro-milestone-gap: clamp(0.55rem, 1.1vw, 1.35rem);
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 0.85rem 0.6rem;
+    grid-template-columns: repeat(11, minmax(0, 1fr)) minmax(0, 2fr);
+    grid-template-rows: repeat(9, minmax(0, 1fr));
+    gap: clamp(0.4rem, 0.75vh, 1.05rem) clamp(0.35rem, 0.65vw, 0.95rem);
     width: 100%;
-    margin-bottom: 2rem;
+    margin-inline: auto;
+    margin-bottom: clamp(2rem, 3.5vh, 3.5rem);
+    flex: 1;
+    min-height: 0;
+    align-content: center;
+    justify-content: center;
 }
 
 .retrospective-hour {
     pointer-events: auto;
-    position: relative;
+    width: var(--retro-cell-size, 100%);
+    height: var(--retro-cell-size, auto);
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 1;
+    justify-self: center;
+    align-self: center;
+}
+
+.retrospective-grid .retrospective-hour.milestone-hundred {
+    display: block;
+    width: var(--retro-milestone-size);
+    height: var(--retro-milestone-size);
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: unset;
+    align-self: center;
+    justify-self: center;
+    margin: 0;
+    margin-inline-start: var(--retro-milestone-gap);
+    border-style: solid;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
 }
 
 .retrospective-hour.filled:hover {
-    transform: scale(1.14);
+    transform: scale(1.08);
     z-index: 2;
 }
 
 .retrospective-tooltip {
     position: fixed;
     transform: translateX(-50%);
-    background: var(--text-main);
-    color: var(--bg-color);
+    background: rgba(255, 255, 255, 0.88);
+    color: var(--text-muted);
     font-size: 0.75rem;
     letter-spacing: 0.02em;
     padding: 0.35rem 0.65rem;
     border-radius: 4px;
+    border: 1px solid rgba(230, 229, 224, 0.9);
+    box-shadow: 0 2px 10px rgba(26, 26, 26, 0.06);
+    backdrop-filter: blur(6px);
     white-space: nowrap;
     pointer-events: none;
     z-index: 200;
@@ -720,8 +827,6 @@ header {
     padding: 0.5rem 0.8rem;
     border-radius: 24px;
     transition: background-color 0.15s ease;
-    margin-left: -0.8rem;
-    margin-right: -0.8rem;
     position: relative;
 }
 
@@ -733,6 +838,8 @@ header {
     display: flex;
     align-items: center;
     gap: 1rem;
+    min-width: 0;
+    flex: 1 1 auto;
 }
 
 .activity-row-right {
@@ -776,6 +883,10 @@ header {
     display: flex;
     flex-direction: column;
     gap: 2.2rem;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .reflection-group {

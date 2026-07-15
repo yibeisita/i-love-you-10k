@@ -4,6 +4,7 @@ import { renderDashboard } from './render.js';
 import { getTotalHours, checkHundredHourMilestone } from './hundred-hour.js';
 import { openCurrentReflection, scrollToReflectingSection } from './prompts.js';
 import { playPunchSound } from './sound.js';
+import { syncControlsSidebarHeight } from './sidebar-layout.js';
 
 export function assembleTrackerGrid() {
     const gridTarget = document.getElementById('hour-grid-target');
@@ -17,6 +18,7 @@ export function assembleTrackerGrid() {
     }
 
     gridTarget.appendChild(createHourCircle(100, current, true));
+    syncControlsSidebarHeight();
 }
 
 function createHourCircle(index, skill, isMilestone = false) {

@@ -3,6 +3,7 @@ import { getActiveSkill, saveState } from './state.js';
 import { escapeHTML } from './utils.js';
 import { renderDashboard } from './render.js';
 import { assembleTrackerGrid, recalculateCounters } from './tracker.js';
+import { syncControlsSidebarHeight } from './sidebar-layout.js';
 
 let pickerTargetId = null;
 
@@ -62,6 +63,8 @@ export function renderActivityList() {
 
         list.appendChild(row);
     });
+
+    syncControlsSidebarHeight();
 }
 
 export function selectActivity(id) {

@@ -1,6 +1,7 @@
 import { getActiveSkill, saveState } from './state.js';
 import { renderDashboard } from './render.js';
 import { setView } from './views.js';
+import { syncControlsSidebarHeight } from './sidebar-layout.js';
 import {
     getCurrentBlock,
     getBlockById,
@@ -123,6 +124,8 @@ export function renderReflectionBlockNav(skill) {
         btn.addEventListener('click', () => openReflectionBlock(block.id));
         nav.appendChild(btn);
     });
+
+    syncControlsSidebarHeight();
 }
 
 function updateReflectionNavState(skill, block) {

@@ -1,3 +1,5 @@
+import { syncControlsSidebarHeight } from './sidebar-layout.js';
+
 let currentActiveView = 'home';
 
 function playEnterAnimation(element) {
@@ -16,7 +18,7 @@ function animatePromptTitles(viewName) {
 
     view.querySelectorAll('.prompts-heading').forEach((heading, index) => {
         heading.classList.remove('title-reveal');
-        heading.style.animationDelay = `${index * 1.2}s`;
+        heading.style.animationDelay = `${index * 2}s`;
         void heading.offsetWidth;
         heading.classList.add('title-reveal');
     });
@@ -58,6 +60,10 @@ export function setView(viewName) {
 
     if (wasHome) {
         playEnterAnimation(headerBar);
+    }
+
+    if (viewName === 'landing') {
+        requestAnimationFrame(() => syncControlsSidebarHeight());
     }
 }
 

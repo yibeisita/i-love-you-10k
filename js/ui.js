@@ -3,6 +3,7 @@ import { renderActivityList } from './activities.js';
 import { assembleTrackerGrid, recalculateCounters } from './tracker.js';
 import { loadPromptsIntoUI, resetViewingBlock } from './prompts.js';
 import { renderRetrospectiveBlockNav, resetViewingRetrospective } from './retrospective.js';
+import { syncControlsSidebarHeight } from './sidebar-layout.js';
 
 export function loadActiveSkillIntoUI() {
     const current = getActiveSkill();
@@ -16,4 +17,5 @@ export function loadActiveSkillIntoUI() {
     recalculateCounters();
     loadPromptsIntoUI();
     renderRetrospectiveBlockNav(current);
+    syncControlsSidebarHeight();
 }

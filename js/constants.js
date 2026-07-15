@@ -1,5 +1,11 @@
 export const STORAGE_KEY = 'cosmic_multi_10k_state';
 
+export const RETROSPECTIVE_HOUR_COUNT = 100;
+export const RETROSPECTIVE_STANDARD_COLUMNS = 11;
+export const RETROSPECTIVE_GRID_COLUMNS = 12;
+export const RETROSPECTIVE_ROWS = 9;
+export const RETROSPECTIVE_MILESTONE_SCALE = 2;
+
 export const ORB_COLORS = [
     { name: 'Teal', gradient: 'radial-gradient(circle at 48% 50%, #52c7c1 0%, #8cd8d3 30%, #c4e9e4 65%, #e9f4ef 100%)' },
     { name: 'Mint', gradient: 'radial-gradient(circle at 48% 50%, #58c6c3 0%, #90d7d4 30%, #c6e8e5 65%, #e9f3f0 100%)' },

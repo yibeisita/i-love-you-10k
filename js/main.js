@@ -4,6 +4,7 @@ import { setView, handleHeaderBack, initHomeView } from './views.js';
 import { addSkillFromInput, renameActiveSkill, bindSkillDashboardEvents } from './skills.js';
 import { renderDashboard } from './render.js';
 import { buildSwatchGrid, addActivity, closeColorPicker } from './activities.js';
+import { bindControlsSidebarHeightSync } from './sidebar-layout.js';
 import { loadActiveSkillIntoUI } from './ui.js';
 import { saveCurrentPrompts, openCurrentReflection } from './prompts.js';
 import { openLatestRetrospective } from './retrospective.js';
@@ -63,6 +64,7 @@ function bindEvents() {
 
 document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
+    bindControlsSidebarHeightSync();
     initApp();
     initHomeView();
     startLoveCycler();
