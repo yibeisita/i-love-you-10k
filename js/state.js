@@ -157,9 +157,8 @@ export function loadState() {
         return;
     }
 
-    const id = `skill_${Date.now()}`;
-    appState.skills[id] = createInitialSkillData('Italian');
-    appState.activeSkillId = id;
+    appState.activeSkillId = null;
+    appState.skills = {};
 }
 
 export function saveState() {

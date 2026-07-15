@@ -44,12 +44,12 @@ describe('state persistence', () => {
         expect(localStorage.getItem(STORAGE_KEY)).toContain('"Drawing"');
     });
 
-    it('creates a default skill when no saved state exists', () => {
+    it('starts with no skills when no saved state exists', () => {
         loadState();
 
-        expect(appState.activeSkillId).toBeTruthy();
-        expect(Object.keys(appState.skills)).toHaveLength(1);
-        expect(getActiveSkill()?.name).toBe('Italian');
+        expect(appState.activeSkillId).toBeNull();
+        expect(Object.keys(appState.skills)).toHaveLength(0);
+        expect(getActiveSkill()).toBeNull();
     });
 
     it('migrates legacy skill data into hundred-hour blocks', () => {
