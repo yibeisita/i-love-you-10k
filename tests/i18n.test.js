@@ -51,5 +51,6 @@ describe('i18n', () => {
         expect(html).toContain(`mailto:${CONTACT_EMAIL}`);
         expect(html).toContain(GITHUB_REPO_URL);
         expect(getFaqSections().some((section) => section.title === 'Contact')).toBe(true);
+        expect(html).toContain('if it is lost, it is lost');
     });
 });
