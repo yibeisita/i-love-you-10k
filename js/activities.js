@@ -9,6 +9,11 @@ import { t, getColorName } from './i18n.js';
 import { isSkillComplete, getActivityHoursSummary } from './hundred-hour.js';
 
 let pickerTargetId = null;
+let dragFromHandle = false;
+
+function clearDragFromHandle() {
+    dragFromHandle = false;
+}
 
 export function buildSwatchGrid() {
     const grid = document.getElementById('color-swatch-grid');
@@ -46,8 +51,10 @@ export function renderActivityList() {
         const row = document.createElement('div');
         row.className = `activity-row${isSelected ? ' selected' : ''}`;
         row.id = `act-row-${act.id}`;
+        row.draggable = true;
         row.innerHTML = `
             <div class="activity-row-left">
+                <span class="activity-drag-handle" title="${t('reorderActivity')}" aria-label="${t('reorderActivity')}" role="button" tabindex="-1"></span>
                 <div class="color-preview-dot" id="dot-${act.id}" style="background:${gradient}; border:none;"></div>
                 <input type="text" class="activity-label-input" value="${escapeHTML(act.label)}">
             </div>
@@ -56,6 +63,48 @@ export function renderActivityList() {
                 <div class="radio-indicator"></div>
             </div>
         `;
+
+        const handle = row.querySelector('.activity-drag-handle');
+        handle.addEventListener('mousedown', () => {
+            dragFromHandle = true;
+            window.addEventListener('mouseup', clearDragFromHandle, { once: true });
+        });
+
+        row.addEventListener('dragstart', (event) => {
+            if (!dragFromHandle) {
+                event.preventDefault();
+                return;
+            }
+            row.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', act.id);
+        });
+
+        row.addEventListener('dragend', () => {
+            clearDragFromHandle();
+            row.classList.remove('dragging');
+            syncActivityOrderFromDom();
+        });
+
+        row.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+
+            const dragging = list.querySelector('.activity-row.dragging');
+            if (!dragging || dragging === row) return;
+
+            const rect = row.getBoundingClientRect();
+            const placeAfter = event.clientY > rect.top + rect.height / 2;
+            if (placeAfter) {
+                row.after(dragging);
+            } else {
+                row.before(dragging);
+            }
+        });
+
+        row.addEventListener('drop', (event) => {
+            event.preventDefault();
+        });
 
         row.querySelector('.color-preview-dot').addEventListener('click', (event) => {
             openColorPicker(event, act.id);
@@ -76,6 +125,39 @@ export function renderActivityList() {
     });
 
     syncControlsSidebarHeight();
+}
+
+export function syncActivityOrderFromDom() {
+    const current = getActiveSkill();
+    if (!current || isSkillComplete(current)) return;
+
+    const list = document.getElementById('activity-list');
+    if (!list) return;
+
+    const ids = [...list.querySelectorAll('.activity-row')].map((row) => row.id.slice('act-row-'.length));
+    const byId = new Map(current.activities.map((activity) => [activity.id, activity]));
+    const next = ids.map((id) => byId.get(id)).filter(Boolean);
+
+    if (next.length !== current.activities.length) return;
+    if (next.every((activity, index) => activity.id === current.activities[index].id)) return;
+
+    current.activities = next;
+    saveState();
+}
+
+export function moveActivity(fromId, toIndex) {
+    const current = getActiveSkill();
+    if (!current) return false;
+
+    const fromIndex = current.activities.findIndex((activity) => activity.id === fromId);
+    if (fromIndex < 0 || toIndex < 0 || toIndex >= current.activities.length || fromIndex === toIndex) {
+        return false;
+    }
+
+    const [moved] = current.activities.splice(fromIndex, 1);
+    current.activities.splice(toIndex, 0, moved);
+    saveState();
+    return true;
 }
 
 function renderActivitySummary(skill, list) {
