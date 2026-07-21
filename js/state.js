@@ -1,6 +1,7 @@
 import { STORAGE_KEY } from './constants.js';
 import { getDefaultActivityLabels } from './i18n.js';
 import { migrateLegacyColorIndex } from './orb-palette.js';
+import { getLoggedActId } from './logged-hours.js';
 
 const MAX_BLOCKS = 100;
 const COLOR_PALETTE_VERSION = 2;
@@ -60,7 +61,11 @@ export function createInitialSkillData(name) {
 }
 
 function snapshotBlockActivities(skill, block) {
-    const usedActIds = new Set(Object.values(block.loggedHours || {}));
+    const usedActIds = new Set(
+        Object.values(block.loggedHours || {})
+            .map(getLoggedActId)
+            .filter(Boolean)
+    );
     block.archivedActivities = skill.activities
         .filter((act) => usedActIds.has(act.id))
         .map((act) => ({ id: act.id, label: act.label, colorIndex: act.colorIndex }));

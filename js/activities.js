@@ -7,6 +7,7 @@ import { assembleTrackerGrid, recalculateCounters } from './tracker.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
 import { t, getColorName } from './i18n.js';
 import { isSkillComplete, getActivityHoursSummary } from './hundred-hour.js';
+import { getLoggedActId } from './logged-hours.js';
 
 let pickerTargetId = null;
 let dragFromHandle = false;
@@ -214,7 +215,7 @@ export function deleteActivity(event, id) {
     }
 
     Object.keys(current.loggedHoursData).forEach((key) => {
-        if (current.loggedHoursData[key] === id) {
+        if (getLoggedActId(current.loggedHoursData[key]) === id) {
             delete current.loggedHoursData[key];
         }
     });

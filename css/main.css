@@ -598,7 +598,7 @@ body:has(#view-retrospective.active-view) .tracker-header {
     z-index: 2;
 }
 
-.retrospective-tooltip {
+.hour-tooltip {
     position: fixed;
     transform: translateX(-50%);
     background: rgba(255, 255, 255, 0.88);

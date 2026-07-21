@@ -12,9 +12,14 @@ import {
     RETROSPECTIVE_ROWS,
     RETROSPECTIVE_STANDARD_COLUMNS,
 } from './constants.js';
+import {
+    getLoggedActId,
+    getLoggedPunchedAt,
+    countActivityHoursForSkill,
+} from './logged-hours.js';
+import { formatHourTooltipText, showHourTooltip, hideHourTooltip } from './hour-tooltip.js';
 
 let viewingRetrospectiveBlockId = null;
-let tooltipEl = null;
 let layoutGrid = null;
 
 function getRetrospectiveAvailableHeight(grid) {
@@ -102,31 +107,24 @@ function getViewingRetrospectiveBlock(skill) {
     return completed[completed.length - 1] ?? null;
 }
 
-function getTooltip() {
-    if (!tooltipEl) {
-        tooltipEl = document.createElement('div');
-        tooltipEl.id = 'retrospective-tooltip';
-        tooltipEl.className = 'retrospective-tooltip';
-        tooltipEl.hidden = true;
-        document.body.appendChild(tooltipEl);
+function showRetrospectiveTooltip(event, entry, skill, block) {
+    const actId = getLoggedActId(entry);
+
+    if (!actId) {
+        showHourTooltip(event, t('hourNotLogged'));
+        return;
     }
-    return tooltipEl;
-}
 
-function showRetrospectiveTooltip(event, hour, actId, skill, block) {
-    const tooltip = getTooltip();
-    const label = actId ? getActivityLabelForSkill(skill, actId, block) : t('hourNotLogged');
-
-    tooltip.textContent = t('hourTooltip', { hour, label });
-    tooltip.hidden = false;
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    tooltip.style.left = `${rect.left + rect.width / 2}px`;
-    tooltip.style.top = `${rect.bottom + 8}px`;
-}
-
-function hideRetrospectiveTooltip() {
-    getTooltip().hidden = true;
+    const label = getActivityLabelForSkill(skill, actId, block);
+    const hours = countActivityHoursForSkill(skill, actId);
+    showHourTooltip(
+        event,
+        formatHourTooltipText({
+            punchedAt: getLoggedPunchedAt(entry),
+            label,
+            hours,
+        })
+    );
 }
 
 function createReadonlyHourCircle(index, skill, loggedHours, block, isMilestone = false) {
@@ -140,7 +138,8 @@ function createReadonlyHourCircle(index, skill, loggedHours, block, isMilestone 
         circle.appendChild(label);
     }
 
-    const actId = loggedHours[index];
+    const entry = loggedHours[index];
+    const actId = getLoggedActId(entry);
     if (actId) {
         circle.style.background = getActivityGradientForSkill(skill, actId, block);
         circle.classList.add('filled');
@@ -150,8 +149,8 @@ function createReadonlyHourCircle(index, skill, loggedHours, block, isMilestone 
     }
 
     circle.dataset.hour = index;
-    circle.addEventListener('mouseenter', (event) => showRetrospectiveTooltip(event, index, actId, skill, block));
-    circle.addEventListener('mouseleave', hideRetrospectiveTooltip);
+    circle.addEventListener('mouseenter', (event) => showRetrospectiveTooltip(event, entry, skill, block));
+    circle.addEventListener('mouseleave', hideHourTooltip);
 
     return circle;
 }
@@ -163,7 +162,7 @@ function assembleRetrospectiveGrid(skill, block) {
     if (!grid || !emptyNote) return;
 
     grid.innerHTML = '';
-    hideRetrospectiveTooltip();
+    hideHourTooltip();
 
     if (!block) {
         emptyNote.hidden = false;
@@ -234,7 +233,7 @@ export function renderRetrospectiveBlockNav(skill) {
 
 export function resetViewingRetrospective() {
     viewingRetrospectiveBlockId = null;
-    hideRetrospectiveTooltip();
+    hideHourTooltip();
 }
 
 export function openRetrospectiveBlock(blockId) {

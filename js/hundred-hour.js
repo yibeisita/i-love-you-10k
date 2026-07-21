@@ -1,10 +1,15 @@
 import { saveState, createHundredHourBlock } from './state.js';
+import { getLoggedActId } from './logged-hours.js';
 
 export const MAX_BLOCKS = 100;
 export const MAX_HOURS = 10000;
 
 function snapshotBlockActivities(skill, block) {
-    const usedActIds = new Set(Object.values(block.loggedHours || {}));
+    const usedActIds = new Set(
+        Object.values(block.loggedHours || {})
+            .map(getLoggedActId)
+            .filter(Boolean)
+    );
     block.archivedActivities = skill.activities
         .filter((act) => usedActIds.has(act.id))
         .map((act) => ({ id: act.id, label: act.label, colorIndex: act.colorIndex }));
@@ -110,11 +115,12 @@ export function getFinalHourActivity(skill) {
     }
 
     const actId =
-        block100.loggedHours['100'] ??
-        block100.loggedHours[100] ??
+        getLoggedActId(block100.loggedHours['100']) ??
+        getLoggedActId(block100.loggedHours[100]) ??
         Object.entries(block100.loggedHours)
             .sort(([hourA], [hourB]) => Number(hourB) - Number(hourA))
-            .map(([, id]) => id)[0] ??
+            .map(([, entry]) => getLoggedActId(entry))
+            .find(Boolean) ??
         null;
 
     return { actId, block: block100 };
@@ -131,7 +137,9 @@ export function getActivityHoursSummary(skill) {
                   ? skill.loggedHoursData
                   : {};
 
-        Object.values(hours || {}).forEach((actId) => {
+        Object.values(hours || {}).forEach((entry) => {
+            const actId = getLoggedActId(entry);
+            if (!actId) return;
             counts[actId] = (counts[actId] || 0) + 1;
         });
     });
