@@ -1,23 +1,20 @@
 import { getActiveSkill } from './state.js';
-import { getCompletedBlocks, getBlockMilestoneHours } from './hundred-hour.js';
+import { getCompletedBlocks, getBlockMilestoneHours, getBlockActivityHoursSummary } from './hundred-hour.js';
 import { getActivityGradientForSkill, getActivityLabelForSkill } from './colors.js';
 import { setView } from './views.js';
 import { renderBlockNav } from './block-nav.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
-import { t, tCount } from './i18n.js';
+import { t, tCount, getLocale } from './i18n.js';
 import {
+    ORB_COLORS,
     RETROSPECTIVE_GRID_COLUMNS,
     RETROSPECTIVE_HOUR_COUNT,
     RETROSPECTIVE_MILESTONE_SCALE,
     RETROSPECTIVE_ROWS,
     RETROSPECTIVE_STANDARD_COLUMNS,
 } from './constants.js';
-import {
-    getLoggedActId,
-    getLoggedPunchedAt,
-    countActivityHoursForSkill,
-} from './logged-hours.js';
-import { formatHourTooltipText, showHourTooltip, hideHourTooltip } from './hour-tooltip.js';
+import { getLoggedActId } from './logged-hours.js';
+import { formatTrackerCircleTooltip, showHourTooltip, hideHourTooltip } from './hour-tooltip.js';
 
 let viewingRetrospectiveBlockId = null;
 let layoutGrid = null;
@@ -116,15 +113,7 @@ function showRetrospectiveTooltip(event, entry, skill, block) {
     }
 
     const label = getActivityLabelForSkill(skill, actId, block);
-    const hours = countActivityHoursForSkill(skill, actId);
-    showHourTooltip(
-        event,
-        formatHourTooltipText({
-            punchedAt: getLoggedPunchedAt(entry),
-            label,
-            hours,
-        })
-    );
+    showHourTooltip(event, formatTrackerCircleTooltip(entry, label));
 }
 
 function createReadonlyHourCircle(index, skill, loggedHours, block, isMilestone = false) {
@@ -155,21 +144,60 @@ function createReadonlyHourCircle(index, skill, loggedHours, block, isMilestone 
     return circle;
 }
 
+function renderRetrospectiveActivities(skill, block) {
+    const list = document.getElementById('retrospective-activities');
+    if (!list) return;
+
+    list.innerHTML = '';
+    hideHourTooltip();
+
+    const summary = getBlockActivityHoursSummary(skill, block);
+
+    summary.forEach((entry) => {
+        const gradient = ORB_COLORS[entry.colorIndex]?.gradient ?? '';
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = 'retrospective-activity-row';
+        row.setAttribute(
+            'aria-label',
+            `${entry.label}: ${t('activitySummaryHours', { hours: entry.hours.toLocaleString(getLocale()) })}`
+        );
+        row.innerHTML = `
+            <div class="retrospective-activity-orb" style="background:${gradient};">
+                <span class="retrospective-activity-hours">${entry.hours}</span>
+            </div>
+        `;
+        row.addEventListener('mouseenter', (event) => {
+            showHourTooltip(event, entry.label);
+        });
+        row.addEventListener('mouseleave', hideHourTooltip);
+        row.addEventListener('focus', (event) => {
+            showHourTooltip(event, entry.label);
+        });
+        row.addEventListener('blur', hideHourTooltip);
+        list.appendChild(row);
+    });
+}
+
 function assembleRetrospectiveGrid(skill, block) {
     const grid = document.getElementById('retrospective-grid');
     const emptyNote = document.getElementById('retrospective-empty');
+    const layout = document.getElementById('retrospective-layout');
 
-    if (!grid || !emptyNote) return;
+    if (!grid || !emptyNote || !layout) return;
 
     grid.innerHTML = '';
     hideHourTooltip();
 
     if (!block) {
         emptyNote.hidden = false;
+        layout.hidden = true;
+        renderRetrospectiveActivities(skill, null);
         return;
     }
 
     emptyNote.hidden = true;
+    layout.hidden = false;
 
     const loggedHours = block.loggedHours || {};
 
@@ -187,6 +215,7 @@ function assembleRetrospectiveGrid(skill, block) {
     milestone.style.gridRow = '1 / -1';
     grid.appendChild(milestone);
 
+    renderRetrospectiveActivities(skill, block);
     scheduleRetrospectiveGridLayout(grid);
 }
 

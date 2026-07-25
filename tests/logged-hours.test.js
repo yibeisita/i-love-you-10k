@@ -6,9 +6,10 @@ import {
     countActivityHoursForSkill,
     formatPunchedDate,
 } from '../js/logged-hours.js';
-import { formatHourTooltipText } from '../js/hour-tooltip.js';
+import { formatHourTooltipText, formatActivityHoursTooltip, formatTrackerCircleTooltip } from '../js/hour-tooltip.js';
 import { createTestSkill } from './helpers/fixtures.js';
 import { assembleTrackerGrid } from '../js/tracker.js';
+import { renderActivityList } from '../js/activities.js';
 import { appState } from '../js/state.js';
 import { mountTrackerPageDOM } from './helpers/dom.js';
 
@@ -46,14 +47,28 @@ describe('logged hours helpers', () => {
 });
 
 describe('hour tooltip text', () => {
-    it('includes date, activity label, and hour count', () => {
+    it('shows date and label without hours by default', () => {
         expect(
             formatHourTooltipText({
                 punchedAt: '2026-07-21',
                 label: 'Practice/Drills',
-                hours: 12,
             })
         ).toMatch(/Practice\/Drills/);
+        expect(
+            formatHourTooltipText({
+                punchedAt: '2026-07-21',
+                label: 'Practice/Drills',
+            })
+        ).not.toMatch(/hours/);
+        expect(
+            formatHourTooltipText({
+                punchedAt: null,
+                label: 'Theory/Study',
+            })
+        ).toBe('Theory/Study');
+    });
+
+    it('includes hours when provided', () => {
         expect(
             formatHourTooltipText({
                 punchedAt: '2026-07-21',
@@ -61,17 +76,15 @@ describe('hour tooltip text', () => {
                 hours: 12,
             })
         ).toMatch(/12 hours/);
-        expect(
-            formatHourTooltipText({
-                punchedAt: null,
-                label: 'Theory/Study',
-                hours: 3,
-            })
-        ).toBe('Theory/Study · 3 hours');
+    });
+
+    it('formats activity hour counts', () => {
+        expect(formatActivityHoursTooltip(5)).toBe('5 hours');
+        expect(formatActivityHoursTooltip(0)).toBe('0 hours');
     });
 });
 
-describe('tracker hover tooltips', () => {
+describe('tracker and activity hover tooltips', () => {
     beforeEach(() => {
         document.body.innerHTML = '';
         mountTrackerPageDOM();
@@ -80,7 +93,7 @@ describe('tracker hover tooltips', () => {
         document.getElementById('hour-tooltip')?.remove();
     });
 
-    it('shows punch date and activity hour count on hover', () => {
+    it('shows punch date and activity label on circle hover without hour count', () => {
         const skill = createTestSkill();
         skill.loggedHoursData = {
             1: createLoggedHour('act0', '2026-07-21'),
@@ -100,7 +113,33 @@ describe('tracker hover tooltips', () => {
         expect(tooltip).not.toBeNull();
         expect(tooltip.hidden).toBe(false);
         expect(tooltip.textContent).toMatch(/Practice\/Drills/);
-        expect(tooltip.textContent).toMatch(/2 hours/);
+        expect(tooltip.textContent).not.toMatch(/hours/);
         expect(tooltip.textContent).toMatch(/2026|Jul/);
+        expect(formatTrackerCircleTooltip(skill.loggedHoursData[1], 'Practice/Drills')).toMatch(
+            /Jul.*2026.*Practice\/Drills|Practice\/Drills.*Jul.*2026/
+        );
+    });
+
+    it('shows activity hour count when hovering an activity row', () => {
+        const skill = createTestSkill();
+        skill.loggedHoursData = {
+            1: createLoggedHour('act0', '2026-07-21'),
+            2: createLoggedHour('act0', '2026-07-22'),
+            3: createLoggedHour('act1', '2026-07-23'),
+        };
+        appState.skills.skill_1 = skill;
+        appState.activeSkillId = 'skill_1';
+
+        renderActivityList();
+
+        const row = document.getElementById('act-row-act0');
+        expect(row).not.toBeNull();
+
+        row.dispatchEvent(new Event('mouseenter', { bubbles: true }));
+
+        const tooltip = document.getElementById('hour-tooltip');
+        expect(tooltip).not.toBeNull();
+        expect(tooltip.hidden).toBe(false);
+        expect(tooltip.textContent).toBe('2 hours');
     });
 });

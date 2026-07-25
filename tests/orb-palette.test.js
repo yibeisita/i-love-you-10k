@@ -3,6 +3,8 @@ import { ORB_COLORS } from '../js/constants.js';
 import { COLOR_NAME_KEYS } from '../js/i18n-strings.js';
 import {
     createOrbGradient,
+    createCompactOrbGradient,
+    getCompactOrbGradient,
     EXTENDED_ORB_PALETTE,
     getSwatchDisplayOrder,
     migrateLegacyColorIndex,
@@ -15,6 +17,14 @@ describe('orb palette', () => {
 
         expect(gradient).toContain('#C85078');
         expect(gradient).toContain('radial-gradient');
+    });
+
+    it('builds a stronger compact gradient for small orbs', () => {
+        const gradient = createCompactOrbGradient('#C85078');
+
+        expect(gradient).toContain('#C85078');
+        expect(gradient).toContain('radial-gradient');
+        expect(getCompactOrbGradient({ hex: '#C85078', gradient: 'flat' })).toContain('#C85078');
     });
 
     it('includes the extended palette after the legacy colors', () => {

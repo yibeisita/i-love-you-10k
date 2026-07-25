@@ -167,6 +167,34 @@ export function getActivityHoursSummary(skill) {
         .sort((a, b) => b.hours - a.hours);
 }
 
+export function getBlockActivityHoursSummary(skill, block) {
+    if (!skill || !block) return [];
+
+    const counts = {};
+    Object.values(block.loggedHours || {}).forEach((entry) => {
+        const actId = getLoggedActId(entry);
+        if (!actId) return;
+        counts[actId] = (counts[actId] || 0) + 1;
+    });
+
+    const activityById = new Map(skill.activities.map((act) => [act.id, act]));
+    (block.archivedActivities || []).forEach((act) => {
+        activityById.set(act.id, act);
+    });
+
+    return Object.entries(counts)
+        .map(([id, hours]) => {
+            const act = activityById.get(id);
+            return {
+                id,
+                label: act?.label ?? id,
+                colorIndex: act?.colorIndex ?? 0,
+                hours,
+            };
+        })
+        .sort((a, b) => b.hours - a.hours);
+}
+
 export function isSetupComplete(skill) {
     return ['purpose', 'identity', 'starting', 'endurance', 'negotiables'].every(
         (key) => (skill.prompts[key] || '').trim().length > 0

@@ -9,6 +9,25 @@ export function createOrbGradient(hex) {
     return `radial-gradient(circle at 48% 50%, ${hex} 0%, ${mixWithWhite(hex, 0.28)} 30%, ${mixWithWhite(hex, 0.58)} 65%, ${mixWithWhite(hex, 0.85)} 100%)`;
 }
 
+/** Stronger core color for small orbs where the usual fade reads as flat. */
+export function createCompactOrbGradient(hex) {
+    return `radial-gradient(circle at 42% 38%, ${mixWithWhite(hex, 0.12)} 0%, ${hex} 38%, ${mixWithWhite(hex, 0.22)} 72%, ${mixWithWhite(hex, 0.45)} 100%)`;
+}
+
+export function extractOrbHex(orbOrGradient) {
+    if (!orbOrGradient) return null;
+    if (typeof orbOrGradient === 'string') {
+        return orbOrGradient.match(/#[0-9a-fA-F]{6}/)?.[0] ?? null;
+    }
+    if (orbOrGradient.hex) return orbOrGradient.hex;
+    return orbOrGradient.gradient?.match(/#[0-9a-fA-F]{6}/)?.[0] ?? null;
+}
+
+export function getCompactOrbGradient(orb) {
+    const hex = extractOrbHex(orb);
+    return hex ? createCompactOrbGradient(hex) : orb?.gradient ?? '';
+}
+
 export const EXTENDED_ORB_PALETTE = [
     { key: 'colorLightBlue', hex: '#CBD9EA' },
     { key: 'colorDeeperBlue', hex: '#C5D3E4' },

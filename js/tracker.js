@@ -16,10 +16,8 @@ import { syncControlsSidebarHeight } from './sidebar-layout.js';
 import {
     createLoggedHour,
     getLoggedActId,
-    getLoggedPunchedAt,
-    countActivityHoursForSkill,
 } from './logged-hours.js';
-import { formatHourTooltipText, showHourTooltip, hideHourTooltip } from './hour-tooltip.js';
+import { formatTrackerCircleTooltip, showHourTooltip, hideHourTooltip } from './hour-tooltip.js';
 import { t } from './i18n.js';
 
 export function assembleTrackerGrid() {
@@ -72,8 +70,8 @@ export function assembleCompletedMilestone() {
 function bindHourTooltip(circle, index, skill) {
     circle.addEventListener('mouseenter', (event) => {
         const current = getActiveSkill() ?? skill;
-        const entry = current?.loggedHoursData?.[index];
-        const actId = getLoggedActId(entry);
+        const entry = current?.loggedHoursData?.[index] ?? current?.loggedHoursData?.[String(index)];
+        const actId = getLoggedActId(entry) || circle.dataset.actId || null;
 
         if (!actId) {
             showHourTooltip(event, t('hourNotLogged'));
@@ -81,15 +79,13 @@ function bindHourTooltip(circle, index, skill) {
         }
 
         const label = getActivityLabelForSkill(current, actId) || t('hourNotLogged');
-        const hours = countActivityHoursForSkill(current, actId);
-        showHourTooltip(
-            event,
-            formatHourTooltipText({
-                punchedAt: getLoggedPunchedAt(entry),
-                label,
-                hours,
-            })
-        );
+        const punchedEntry =
+            entry && typeof entry === 'object'
+                ? entry
+                : circle.dataset.punchedAt
+                  ? { actId, punchedAt: circle.dataset.punchedAt }
+                  : entry;
+        showHourTooltip(event, formatTrackerCircleTooltip(punchedEntry, label));
     });
     circle.addEventListener('mouseleave', hideHourTooltip);
 }
@@ -111,6 +107,8 @@ function createHourCircle(index, skill, isMilestone = false) {
         circle.style.background = getActivityGradient(actId);
         circle.dataset.actId = actId;
         circle.classList.add('filled');
+        const punchedAt = typeof entry === 'object' && entry?.punchedAt ? entry.punchedAt : '';
+        if (punchedAt) circle.dataset.punchedAt = punchedAt;
     }
 
     bindHourTooltip(circle, index, skill);
@@ -141,11 +139,13 @@ function createHourCircle(index, skill, isMilestone = false) {
 function assignCircleColor(element, index) {
     const current = getActiveSkill();
     if (!isLoggingAllowed(current)) return;
+    const logged = createLoggedHour(current.activeActivityId);
     element.style.background = getActivityGradient(current.activeActivityId);
     element.dataset.actId = current.activeActivityId;
+    element.dataset.punchedAt = logged.punchedAt;
     element.classList.add('filled');
 
-    current.loggedHoursData[index] = createLoggedHour(current.activeActivityId);
+    current.loggedHoursData[index] = logged;
     saveState();
     playPunchSound();
     recalculateCounters();
@@ -162,6 +162,7 @@ function clearCircleColor(element, index) {
     if (!isLoggingAllowed(current)) return;
     element.style.background = '';
     element.dataset.actId = '';
+    delete element.dataset.punchedAt;
     element.classList.remove('filled');
 
     delete current.loggedHoursData[index];

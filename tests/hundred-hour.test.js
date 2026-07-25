@@ -3,6 +3,7 @@ import {
     checkHundredHourMilestone,
     completeBlockAndStartNew,
     getActivityHoursSummary,
+    getBlockActivityHoursSummary,
     getBlockMilestoneHours,
     getCompletedBlocks,
     getCurrentBlock,
@@ -153,6 +154,27 @@ describe('hundred-hour logic', () => {
         expect(byId.act0 + byId.act1).toBe(10000);
         expect(byId.act0).toBeGreaterThan(0);
         expect(byId.act1).toBeGreaterThan(0);
+    });
+
+    it('summarises activity hours within a single retrospective block', () => {
+        const skill = createTestSkill();
+        fillSetupPrompts(skill);
+        const block = getCurrentBlock(skill);
+        fillBlockStart(block);
+        logHours(skill, 70, 'act0');
+        for (let hour = 71; hour <= 100; hour += 1) {
+            skill.loggedHoursData[String(hour)] = 'act1';
+        }
+        fillBlockReflect(block);
+        completeBlockAndStartNew(skill);
+
+        const completed = getCompletedBlocks(skill)[0];
+        const summary = getBlockActivityHoursSummary(skill, completed);
+        const byId = Object.fromEntries(summary.map((entry) => [entry.id, entry.hours]));
+
+        expect(summary.reduce((total, entry) => total + entry.hours, 0)).toBe(100);
+        expect(byId.act0).toBe(70);
+        expect(byId.act1).toBe(30);
     });
 
     it('opens completed skills on the landing view', () => {

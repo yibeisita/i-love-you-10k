@@ -7,7 +7,8 @@ import { assembleTrackerGrid, recalculateCounters } from './tracker.js';
 import { syncControlsSidebarHeight } from './sidebar-layout.js';
 import { t, getColorName } from './i18n.js';
 import { isSkillComplete, getActivityHoursSummary } from './hundred-hour.js';
-import { getLoggedActId } from './logged-hours.js';
+import { getLoggedActId, countActivityHoursForSkill } from './logged-hours.js';
+import { formatActivityHoursTooltip, showHourTooltip, hideHourTooltip } from './hour-tooltip.js';
 
 let pickerTargetId = null;
 let dragFromHandle = false;
@@ -37,6 +38,7 @@ export function renderActivityList() {
     const current = getActiveSkill();
     const list = document.getElementById('activity-list');
     list.innerHTML = '';
+    hideHourTooltip();
 
     if (!current) return;
 
@@ -106,6 +108,14 @@ export function renderActivityList() {
         row.addEventListener('drop', (event) => {
             event.preventDefault();
         });
+
+        row.addEventListener('mouseenter', (event) => {
+            const skill = getActiveSkill();
+            if (!skill) return;
+            const hours = countActivityHoursForSkill(skill, act.id);
+            showHourTooltip(event, formatActivityHoursTooltip(hours), { align: 'left' });
+        });
+        row.addEventListener('mouseleave', hideHourTooltip);
 
         row.querySelector('.color-preview-dot').addEventListener('click', (event) => {
             openColorPicker(event, act.id);

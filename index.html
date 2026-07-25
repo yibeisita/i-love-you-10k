@@ -101,7 +101,12 @@
 
         <section id="view-retrospective" class="view-section prompts-container-view" aria-label="Retrospective track log">
             <p class="retrospective-empty" id="retrospective-empty" hidden data-i18n="retrospectiveEmpty">Complete a 100-hour block to archive your first track log.</p>
-            <div class="retrospective-grid" id="retrospective-grid"></div>
+            <div class="retrospective-layout" id="retrospective-layout" hidden>
+                <div class="retrospective-grid" id="retrospective-grid"></div>
+                <aside class="retrospective-activities-panel" aria-label="Activities" data-i18n-aria="activities">
+                    <div class="retrospective-activities-list" id="retrospective-activities"></div>
+                </aside>
+            </div>
         </section>
 
         <section id="view-setup" class="view-section prompts-container-view" aria-label="Setup prompts">
