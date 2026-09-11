@@ -53,6 +53,5 @@ export function formatPunchedDate(isoDate, locale = undefined) {
     return parsed.toLocaleDateString(locale, {
         year: 'numeric',
         month: 'short',
-        day: 'numeric',
     });
 }

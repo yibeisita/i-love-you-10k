@@ -40,8 +40,11 @@ describe('logged hours helpers', () => {
         expect(countActivityHoursForSkill(skill, 'act1')).toBe(1);
     });
 
-    it('formats punched dates for display', () => {
-        expect(formatPunchedDate('2026-07-21', 'en-US')).toMatch(/Jul/);
+    it('formats punched dates as month and year', () => {
+        const formatted = formatPunchedDate('2026-07-21', 'en-US');
+        expect(formatted).toMatch(/Jul/);
+        expect(formatted).toMatch(/2026/);
+        expect(formatted).not.toMatch(/21/);
         expect(formatPunchedDate(null)).toBeNull();
     });
 });
