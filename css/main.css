@@ -367,7 +367,7 @@ body:has(#view-retrospective.active-view) {
     overflow: hidden;
     height: 100dvh;
     padding-top: 1rem;
-    padding-bottom: 3rem;
+    padding-bottom: 2rem;
 }
 
 body:has(#view-retrospective.active-view) main {
